@@ -14,17 +14,17 @@ class FourWins:
 
         # The single underscore means you should NOT access those variables!
         # To get the matrix Data use respective getter and setter functions!
-        self._matrix = self.matrixCreate()
-        self._fullness = self.fullnessCreate()
+        self._matrix = self._matrixCreate()
+        self._fullness = self._fullnessCreate()
 
         # Init players
-        self.player1 = self.playerInit(playerName1)
-        self.player2 = self.playerInit(playerName2)
+        self.player1 = self._playerInit(playerName1)
+        self.player2 = self._playerInit(playerName2)
 
         self.playerOnTurn()
 
 
-    def matrixCreate(self, cols=7, rows=7):
+    def _matrixCreate(self, cols=7, rows=7):
         ''' The Matrix shows where which stone is '''
         # This is how it is adressed:
         # [0][0] [0][1] [0][2] ... [0][6]
@@ -35,21 +35,21 @@ class FourWins:
 
     def matrixGet(self):
         ''' Returns a copy of the Matrix '''
-        return copy.deepcopy( self.matrix )
+        return copy.deepcopy( self._matrix )
 
     def matrixGetStone(self, col, row):
         ''' Returns the stone in specific row and column '''
-        return self.matrix[col][row]
+        return self._matrix[col][row]
 
-    def fullnessCreate(self, cols=7):
+    def _fullnessCreate(self, cols=7):
         ''' The fullness shows how many stones are in a column of the matrix '''
         return [0] * cols
 
     def fullnessGet(self):
         ''' Returns a copy of the fullness '''
-        return copy.copy( self.fullness )
+        return copy.copy( self._fullness )
 
-    def playerInit(self, playerName):
+    def _playerInit(self, playerName):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
 
         # Import and return Standard Player
