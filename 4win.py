@@ -18,8 +18,8 @@ class FourWins:
         self._fullness = self._fullnessCreate()
 
         # Init players
-        self.player1 = self._playerInit(playerName1)
-        self.player2 = self._playerInit(playerName2)
+        self._player1 = self._playerInit(playerName1)
+        self._player2 = self._playerInit(playerName2)
 
         self.playerOnTurn()
 
