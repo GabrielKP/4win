@@ -12,6 +12,10 @@ class FourWins:
         ''' Initializes the Game '''
         # Set Variables
 
+        # Number of turns played
+        self.turns = 0
+        # Last positioned Stone
+        self.lastStone = None
         # The single underscore means you should NOT access those variables!
         # To get the matrix Data use respective getter and setter functions!
         self._matrix = self._matrixCreate()
@@ -74,6 +78,23 @@ class FourWins:
         else:
             print( "No such player {}, using standard player".format(playerName) )
             sys.exit(-1)
+
+
+    def _gameLoop(self):
+        ''' Main Game Loop '''
+        winner = 0
+        while( winner == 0 ):
+            # Increment Turn
+            self.turns +=1
+            # Get Placement from Player
+            newPos = self._player1.nextTurn()
+            # Check if move was legal
+            self._moveLegal( newPos )
+            # Place the Stone
+            # Check for winner
+
+            # Change Player
+
 
 
 
