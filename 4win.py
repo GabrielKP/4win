@@ -15,10 +15,9 @@ class FourWins:
         # To get the matrix Data use respective getter and setter functions!
 
         # winner has 4 states:
-        # 0 not determined, 1, 2 if respective player won, 3 for a draw
-        self._winner = 0
-        self._turns = 0
-        self._lastStone = None
+        self._winner = 0                 # # 0 not determined, 1, 2 if respective player won, 3 for a draw
+        self._turns = 0                  # Number of turns
+        self._lastStone = None           # Tuple of last placed Stone
         self._matrix = self._matrixCreate()
         self._fullness = self._fullnessCreate()
 
@@ -92,6 +91,14 @@ class FourWins:
             return 2
         return 1
 
+
+    def _placeStone(self, pos):
+        ''' Places a Stone on pos in matrix '''
+        self._matrix[pos][self._fullness[pos]]
+        self._lastStone = (pos, self._fullness[pos])
+        self._fullness[pos] += 1
+
+
     def _gameLoop(self):
         ''' Main Game Loop '''
 
@@ -107,12 +114,11 @@ class FourWins:
             if not self._moveLegal( newPos ):
                 self._winner = self._flipPlayer( self._currentPlayer )
             # 4. Place the Stone
-            self._lastStone = newPos
-
+            self._placeStone( newPos )
             # Check for winner
 
             # Change Player
-
+            self._currentPlayer = self._flipPlayer( self._currentPlayer )
 
 
 
