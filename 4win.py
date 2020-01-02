@@ -11,13 +11,14 @@ class FourWins:
     def __init__(self, playerName1="standard", playerName2="standard"):
         ''' Initializes the Game '''
         # Set Variables
-
-        # Number of turns played
-        self.turns = 0
-        # Last positioned Stone
-        self.lastStone = None
         # The single underscore means you should NOT access those variables!
         # To get the matrix Data use respective getter and setter functions!
+
+        # winner has 4 states:
+        # 0 not determined, 1, 2 if respective player won, 3 for a draw
+        self._winner = 0
+        self._turns = 0
+        self._lastStone = None
         self._matrix = self._matrixCreate()
         self._fullness = self._fullnessCreate()
 
@@ -25,7 +26,7 @@ class FourWins:
         self._player1 = self._playerInit(playerName1)
         self._player2 = self._playerInit(playerName2)
 
-        self._playerOnTurn = random.randint(1,2)
+        self._currentPlayer = random.randint(1,2)
 
 
     def _matrixCreate(self, cols=7, rows=7):
@@ -80,17 +81,34 @@ class FourWins:
             sys.exit(-1)
 
 
+    def _moveLegal(self, pos):
+        ''' Check if Player can place another stone '''
+        return self._fullness[pos] < 6
+
+
+    def _flipPlayer(self, x):
+        ''' Flips player Number '''
+        if x == 1:
+            return 2
+        return 1
+
     def _gameLoop(self):
         ''' Main Game Loop '''
-        winner = 0
-        while( winner == 0 ):
-            # Increment Turn
-            self.turns +=1
-            # Get Placement from Player
-            newPos = self._player1.nextTurn()
-            # Check if move was legal
-            self._moveLegal( newPos )
-            # Place the Stone
+
+        while( self._winner == 0 ):
+            # 1. Increment Turn
+            self._turns +=1
+            # 2. Get Placement from Player
+            if self._currentPlayer == 1 :
+                newPos = self._player1.nextTurn()
+            else:
+                newPos = self._player2.nextTurn()
+            # 3. Check if move was legal, if not, other player won
+            if not self._moveLegal( newPos ):
+                self._winner = self._flipPlayer( self._currentPlayer )
+            # 4. Place the Stone
+            self._lastStone = newPos
+
             # Check for winner
 
             # Change Player
