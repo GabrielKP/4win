@@ -6,7 +6,12 @@ import random
 class StandardPlayer:
     ''' A basic 4wins player '''
 
-    def __init__(self):
+    def __init__(self, game):
         ''' Init function '''
 
         self.name = "Standard Player"
+        self.game = game
+
+
+    def nextTurn(self):
+        ''' Returns col in which the next stone should be placed '''

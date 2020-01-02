@@ -5,6 +5,13 @@
 
 import sys, copy, random, importlib
 
+# TODOS:
+# Standard Player: Defense, "Attack" and Random placement
+# Example Player
+# GUI
+# Interactive Player
+# Check for Winner
+
 class FourWins:
     ''' Includes all Game functions for 4 wins '''
 
@@ -64,16 +71,16 @@ class FourWins:
         # Import and return Standard Player
         if playerName == "standard":
             mod = importlib.import_module( "StandardPlayer" )
-            return mod.StandardPlayer()
+            return mod.StandardPlayer(self)
         # Import and return an Interactive Player
         elif playerName == "interactive":
             mod = importlib.import_module( "InteractivePlayer" )
-            return mod.InteractivePlayer()
+            return mod.InteractivePlayer(self)
         # Import and return Example Player
         elif playerName == "exampleName":
             # Copy this Code and adapt it to your player
             mod = importlib.import_module( "examplePlayer" )
-            return mod.ExamplePlayer()
+            return mod.ExamplePlayer(self)
         # In Case of not finding a Player end execution
         else:
             print( "No such player {}, using standard player".format(playerName) )
