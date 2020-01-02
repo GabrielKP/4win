@@ -21,7 +21,7 @@ class FourWins:
         self._player1 = self._playerInit(playerName1)
         self._player2 = self._playerInit(playerName2)
 
-        self.playerOnTurn()
+        self._playerOnTurn = random.randint(1,2)
 
 
     def _matrixCreate(self, cols=7, rows=7):
@@ -33,21 +33,26 @@ class FourWins:
         # [6][0] ...           ... [6][6]
         return [[0] * cols for i in range(rows)]
 
+
     def matrixGet(self):
         ''' Returns a copy of the Matrix '''
         return copy.deepcopy( self._matrix )
+
 
     def matrixGetStone(self, col, row):
         ''' Returns the stone in specific row and column '''
         return self._matrix[col][row]
 
+
     def _fullnessCreate(self, cols=7):
         ''' The fullness shows how many stones are in a column of the matrix '''
         return [0] * cols
 
+
     def fullnessGet(self):
         ''' Returns a copy of the fullness '''
         return copy.copy( self._fullness )
+
 
     def _playerInit(self, playerName):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
