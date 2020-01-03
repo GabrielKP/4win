@@ -16,7 +16,7 @@ import sys, copy, random, importlib
 class FourWins:
     ''' Includes all Game functions for 4 wins '''
 
-    def __init__(self, playerName1="standard", playerName2="standard"):
+    def __init__(self, playerName1="standard", playerName2="standard", ncols=7, nrows=7):
         ''' Initializes the Game '''
         # Set Variables
         # The single underscore means you should NOT access those variables!
@@ -26,8 +26,10 @@ class FourWins:
         self._winner = 0                 # # 0 not determined, 1, 2 if respective player won, 3 for a draw
         self._turns = 0                  # Number of turns
         self._lastStone = None           # Tuple of last placed Stone
-        self._matrix = self._matrixCreate()
-        self._fullness = self._fullnessCreate()
+        self._ncols = ncols
+        self._nrows = nrows
+        self._matrix = self._matrixCreate( self._ncols, self._nrows )
+        self._fullness = self._fullnessCreate( self._ncols )
 
         # Init players
         self._player1 = self._playerInit(playerName1)
@@ -36,7 +38,7 @@ class FourWins:
         self._currentPlayer = random.randint(1,2)
 
 
-    def _matrixCreate(self, cols=7, rows=7):
+    def _matrixCreate(self, cols, rows):
         ''' The Matrix shows where which stone is '''
         # This is how it is adressed:
         # [6][0] [6][1] [6][2] ... [6][6]
@@ -57,7 +59,7 @@ class FourWins:
         return self._matrix[row][col]
 
 
-    def _fullnessCreate(self, cols=7):
+    def _fullnessCreate(self, cols):
         ''' The fullness shows how many stones are in a column of the matrix '''
         return [0] * cols
 
@@ -111,7 +113,7 @@ class FourWins:
     def _checkWinner(self):
         ''' If 4 in a row, sets _winner to current player '''
         lrow, lcol = self._lastStone
-        # Start vertical
+        # Vertical
         counter = 0
         # Cant be vertical 4 in the row if the last stone is not in 4th row
         if lrow >= 3:
