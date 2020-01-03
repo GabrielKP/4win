@@ -69,6 +69,11 @@ class FourWins:
         return copy.copy( self._fullness )
 
 
+    def fullnessGetCol(self, col):
+        ''' Return how many stones are in a specific column '''
+        return self._fullness[col]
+
+
     def _playerInit(self, playerName):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
         # Import and return Standard Player
