@@ -129,7 +129,7 @@ class FourWins:
         # Horizontal
         counter = 0
         sLeft = max(0, lcol - 3)
-        sRight = min(self._nrows, lcol + 3)
+        sRight = min(self._nrows - 1, lcol + 3)
         # Count how many same colored stones are between sLeft and sRight
         curr = sLeft
         while curr <= sRight and counter < 4:
