@@ -14,7 +14,7 @@ Built modular:
     ├── StandardPlayer.py        # The Standard Player Implementation, commits -> master
     ├── InteractivePlayer.py     # An interactive Player, if you want to play yourself!
     ├── ExamplePlayer.py         # An example Player to copy and then, commits -> master
-    ├── [otherplayers].py      # Specific other players, commits -> own branch
+    ├── [otherPlayers].py      # Specific other players, commits -> own branch
     └── README.md
 
 ## Player
