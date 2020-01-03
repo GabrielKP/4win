@@ -126,7 +126,19 @@ class FourWins:
                 return
         # Horizontal
         counter = 0
-        
+        sLeft = max(0, lcol - 3)
+        sRight = min(self._nrows, lcol + 3)
+        # Count how many same colored stones are between sLeft and sRight
+        curr = sLeft
+        while curr <= sRight and counter < 4:
+            if self.matrixGetStone(lrow, curr) == self._currentPlayer:
+                counter += 1
+            else:
+                counter = 0
+        if counter == 4:
+            self._winner = self._currentPlayer
+            return
+        # Diagonal
 
     def _gameLoop(self):
         ''' Main Game Loop '''
