@@ -136,6 +136,7 @@ class FourWins:
             # Count how many same colored stones are under last stone
             while self.getStone(curr, lcol) == self._currentPlayer and counter < 4:
                 counter += 1
+                curr -= 1
             if counter == 3:
                 self._winner = self._currentPlayer
                 return
