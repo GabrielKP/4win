@@ -8,9 +8,7 @@ import sys, copy, random, importlib
 # TODOS:
 # Standard Player: Defense, "Attack" and Random placement
 # GUI
-# rename getter functions
 # Basic Output System
-# Interactive Player
 # TEST TEST TEST
 # performance optimization
 
@@ -97,7 +95,7 @@ class FourWins:
 
 
     def moveLegal(self, pos):
-        ''' Check if Player can place another stone '''
+        ''' Check if pos is an allowed column to place a stone in '''
         return 0 <= pos and pos <= 6 and self._fullness[pos] < 6
 
 
