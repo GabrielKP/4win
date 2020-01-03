@@ -194,7 +194,7 @@ class FourWins:
             self._winner = self._currentPlayer
             self.fprint( "checkWinner: Player {} won: 4 diagonal SE to NW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow + 1, ccol - 1), 2 )
             return
-        self.fprint( "checkWinnter: Did not find 4 in a diagonal NW to SE row!", 2 )
+        self.fprint( "checkWinner: Did not find 4 in a diagonal NW to SE row!", 2 )
 
         ### Diagonal SW -> NE
         # Get to SW point
@@ -220,7 +220,7 @@ class FourWins:
             self._winner = self._currentPlayer
             self.fprint( "checkWinner: Player {} won: 4 diagonal NE to SW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow - 1, ccol - 1), 2 )
             return
-        self.fprint( "checkWinnter: Did not find 4 in a diagonal SW to NE row!", 2 )
+        self.fprint( "checkWinner: Did not find 4 in a diagonal SW to NE row!", 2 )
         # No winner was found
         self.fprint( "checkWinner: Did not find 4 in the row.", 2 )
         return
@@ -248,7 +248,8 @@ class FourWins:
             self._placeStone( newPos )
             # Check for winner
             self.fprint( "Game: Entering checkWinner()", 2 )
-            self._checkWinner()
+            if self._checkWinner() != 0:
+                break
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
         self.fprint( "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns) )
