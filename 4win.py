@@ -27,7 +27,7 @@ class FourWins:
         # The single underscore means you should NOT access those variables!
         # To get the matrix Data use respective getter and setter functions!
 
-        # winner has 4 states:
+        self._verbose = verbose
         self._winner = 0                 # # 0 not determined, 1, 2 if respective player won, 3 for a draw
         self._turns = 0                  # Number of turns
         self._lastStone = None           # Tuple of last placed Stone
@@ -41,6 +41,11 @@ class FourWins:
         self._player2 = self._playerInit(playerName2)
 
         self._currentPlayer = random.randint(1,2)
+
+
+    def fprint(self, message, verbosity=1):
+        if verbosity < self._verbose:
+            return print( message )
 
 
     def _matrixCreate(self, cols, rows):
@@ -96,7 +101,7 @@ class FourWins:
             return mod.ExamplePlayer(self)
         # In Case of not finding a Player end execution
         else:
-            print( "No such player {}, using standard player".format(playerName) )
+            self.fprint( "No such player {}, aborting".format(playerName), 0 )
             sys.exit(-1)
 
 
