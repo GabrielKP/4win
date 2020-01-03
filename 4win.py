@@ -205,8 +205,8 @@ class FourWins:
             ccol += crow
             crow = 0
         # Determine ending col / row for check
-        erow = (self._nrows - 1, lrow + 3)
-        ecol = (self._ncols - 1, lcol + 3)
+        erow = min(self._nrows - 1, lrow + 3)
+        ecol = min(self._ncols - 1, lcol + 3)
         # Count amount of stones in the diagonal
         counter = 0
         while ccol <= ecol and crow <= ecol and counter < 4:
