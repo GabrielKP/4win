@@ -101,7 +101,7 @@ class FourWins:
 
     def _placeStone(self, pos):
         ''' Places a Stone on pos in matrix '''
-        self._matrix[pos][self._fullness[pos]]
+        self._matrix[pos][self._fullness[pos]] = self._currentPlayer
         self._lastStone = (pos, self._fullness[pos])
         self._fullness[pos] += 1
 
