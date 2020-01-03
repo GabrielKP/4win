@@ -89,7 +89,7 @@ class FourWins:
 
     def _moveLegal(self, pos):
         ''' Check if Player can place another stone '''
-        return self._fullness[pos] < 6
+        return 0 <= pos and pos <= 6 and self._fullness[pos] < 6
 
 
     def _flipPlayer(self, x):
