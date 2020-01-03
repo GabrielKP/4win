@@ -8,7 +8,8 @@ import sys, copy, random, importlib
 # TODOS:
 # Standard Player: Defense, "Attack" and Random placement
 # GUI
-# Basic Output System
+# Time measurement
+# Output system refinement
 # TEST TEST TEST
 # performance optimization
 
@@ -127,6 +128,7 @@ class FourWins:
     def _checkWinner(self):
         ''' If 4 in a row, sets _winner to current player '''
         lrow, lcol = self._lastStone
+        self.fprint( "checkWinner: Laststone {:2}, {:2}".format(lrow, lcol), 2 )
 
         ### Vertical
         counter = 0
@@ -139,7 +141,9 @@ class FourWins:
                 curr -= 1
             if counter == 3:
                 self._winner = self._currentPlayer
+                self.fprint( "checkWinner: Player {} won: 4 vertical stones starting in position {:2}, {:2}".format(self._currentPlayer, curr + 1, lcol), 2 )
                 return
+        self.fprint( "checkWinner: Did not find 4 in a vertical row!", 2 )
 
         ### Horizontal
         counter = 0
@@ -155,7 +159,9 @@ class FourWins:
             curr += 1
         if counter == 4:
             self._winner = self._currentPlayer
+            self.fprint( "checkWinner: Player {} won: 4 horizontal stones starting in position {:2}, {:2}".format(self._currentPlayer, lrow, curr - 1), 2 )
             return
+        self.fprint( "checkWinner: Did not find 4 in a horizontal row!", 2 )
 
         ### Diagonal NW -> SE
         # Get to NW point
@@ -180,7 +186,9 @@ class FourWins:
             ccol += 1
         if counter == 4:
             self._winner = self._currentPlayer
+            self.fprint( "checkWinner: Player {} won: 4 diagonal SE to NW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow + 1, ccol - 1), 2 )
             return
+        self.fprint( "checkWinnter: Did not find 4 in a diagonal NW to SE row!", 2 )
 
         ### Diagonal SW -> NE
         # Get to SW point
@@ -204,31 +212,40 @@ class FourWins:
             ccol += 1
         if counter == 4:
             self._winner = self._currentPlayer
+            self.fprint( "checkWinner: Player {} won: 4 diagonal NE to SW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow - 1, ccol - 1), 2 )
             return
+        self.fprint( "checkWinnter: Did not find 4 in a diagonal SW to NE row!", 2 )
         # No winner was found
+        self.fprint( "checkWinner: Did not find 4 in the row.", 2 )
         return
 
 
     def _gameLoop(self):
         ''' Main Game Loop '''
-
+        # Execute each turn in this loop
         while( self._winner == 0 ):
             # 1. Increment Turn
             self._turns +=1
+            self.fprint( "Game: -- Turn {:2} --".format(self._turns) )
             # 2. Get Placement from Player
+            self.fprint( "Game: Turn of player {}: \"{}\" ".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name) )
             if self._currentPlayer == 1 :
                 newPos = self._player1.nextTurn()
             else:
                 newPos = self._player2.nextTurn()
+            self.fprint( "Game: Player {}: \"{}\" placed in column {}".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, newPos) )
             # 3. Check if move was legal, if not, other player won
             if not self.moveLegal( newPos ):
                 self._winner = self._flipPlayer( self._currentPlayer )
+                self.fprint( "Game: Placement was illegal!" )
             # 4. Place the Stone
             self._placeStone( newPos )
             # Check for winner
+            self.fprint( "Game: Entering checkWinner()", 2)
             self._checkWinner()
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
+        self.fprint( "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns) )
 
 
 
