@@ -248,7 +248,8 @@ class FourWins:
             self._placeStone( newPos )
             # Check for winner
             self.fprint( "Game: Entering checkWinner()", 2 )
-            if self._checkWinner() != 0:
+            self._checkWinner()
+            if self._winner != 0:
                 break
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
