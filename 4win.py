@@ -152,6 +152,7 @@ class FourWins:
                 counter += 1
             else:
                 counter = 0
+            curr += 1
         if counter == 4:
             self._winner = self._currentPlayer
             return
