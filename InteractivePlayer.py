@@ -20,7 +20,7 @@ class InteractivePlayer:
             # Get User Input
             if wrongInput:
                 print( "{} is nnot a valid Input! Please type an integer between 0 and 6 in a column which is not full!".format(newPos) )
-            newPos = input( "Place a Stone! (type an integer [0,6])" )
+            newPos = int(input( "Place a Stone! integer 0-6: " ))
             wrongInput = True
 
         return newPos
