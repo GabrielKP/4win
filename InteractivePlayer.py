@@ -16,7 +16,7 @@ class InteractivePlayer:
         newPos = -1
         wrongInput = False
 
-        while not game.moveLegal(newPos):
+        while not self.game.moveLegal(newPos):
             # Get User Input
             if wrongInput:
                 print( "{} is nnot a valid Input! Please type an integer between 0 and 6 in a column which is not full!".format(newPos) )
