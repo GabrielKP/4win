@@ -115,7 +115,8 @@ class FourWins:
     def _checkWinner(self):
         ''' If 4 in a row, sets _winner to current player '''
         lrow, lcol = self._lastStone
-        # Vertical
+
+        ### Vertical
         counter = 0
         # Cant be vertical 4 in the row if the last stone is not in 4th row
         if lrow >= 3:
@@ -126,7 +127,8 @@ class FourWins:
             if counter == 3:
                 self._winner = self._currentPlayer
                 return
-        # Horizontal
+
+        ### Horizontal
         counter = 0
         sLeft = max(0, lcol - 3)
         sRight = min(self._nrows - 1, lcol + 3)
@@ -140,8 +142,8 @@ class FourWins:
         if counter == 4:
             self._winner = self._currentPlayer
             return
-        # Diagonal NW -> SE
-        counter = 0
+
+        ### Diagonal NW -> SE
         # Get to NW point
         ccol = max(0, lcol - 3)
         crow = lrow + lcol - ccol
@@ -150,8 +152,12 @@ class FourWins:
             correction = crow - self._nrows - 1
             ccol += correction
             crow -= correction
-        end = max(0, lrow - 3)
-        while crow >= end:
+        # Determine ending fields
+        erow = max(0, lrow - 3)
+        ecol = min(self._ncols - 1, lcol + 3)
+        # Count amount of stones in the diagonal
+        counter = 0
+        while crow >= erow and ccol <= ecol and counter < 4:
             if self.matrixGetStone(crow, ccol) == self._currentPlayer:
                 counter += 1
             else:
@@ -161,7 +167,32 @@ class FourWins:
         if counter == 4:
             self._winner = self._currentPlayer
             return
-        # Diagonal SW -> NE
+            
+        ### Diagonal SW -> NE
+        # Get to SW point
+        ccol = max(0, lcol - 3)
+        crow = lrow - lcol + ccol
+        # Corner case when you are too far down
+        if crow < 0:
+            ccol += crow
+            crow = 0
+        # Determine ending col / row for check
+        erow = (self._nrows - 1, lrow + 3)
+        ecol = (self._ncols - 1, lcol + 3)
+        # Count amount of stones in the diagonal
+        counter = 0
+        while ccol <= ecol and crow <= ecol and counter < 4:
+            if self.matrixGetStone(crow, ccol) == self._currentPlayer:
+                counter += 1
+            else:
+                counter = 0
+            crow += 1
+            ccol += 1
+        if counter == 4:
+            self._winner = self._currentPlayer
+            return
+        # No winner was found
+        return
 
 
     def _gameLoop(self):
