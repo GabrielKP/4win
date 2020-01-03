@@ -140,7 +140,29 @@ class FourWins:
         if counter == 4:
             self._winner = self._currentPlayer
             return
-        # Diagonal
+        # Diagonal NW -> SE
+        counter = 0
+        # Get to NW point
+        ccol = max(0, lcol - 3)
+        crow = lrow + lcol - ccol
+        # Corner case when you are too far up
+        if crow >= self._nrows:
+            correction = crow - self._nrows - 1
+            ccol += correction
+            crow -= correction
+        end = max(0, lrow - 3)
+        while crow >= end:
+            if self.matrixGetStone(crow, ccol) == self._currentPlayer:
+                counter += 1
+            else:
+                counter = 0
+            crow -= 1
+            ccol += 1
+        if counter == 4:
+            self._winner = self._currentPlayer
+            return
+        # Diagonal SW -> NE
+
 
     def _gameLoop(self):
         ''' Main Game Loop '''
