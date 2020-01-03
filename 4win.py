@@ -8,6 +8,7 @@ import sys, copy, random, importlib
 # TODOS:
 # Standard Player: Defense, "Attack" and Random placement
 # GUI
+# rename getter functions
 # Basic Output System
 # Interactive Player
 # TEST TEST TEST
@@ -49,12 +50,12 @@ class FourWins:
         return [[0] * cols for i in range(rows)]
 
 
-    def matrixGet(self):
+    def getMatrix(self):
         ''' Returns a copy of the Matrix '''
         return copy.deepcopy( self._matrix )
 
 
-    def matrixGetStone(self, row, col):
+    def getStone(self, row, col):
         ''' Returns the stone in specific row and column '''
         return self._matrix[row][col]
 
@@ -64,12 +65,12 @@ class FourWins:
         return [0] * cols
 
 
-    def fullnessGet(self):
+    def getFullness(self):
         ''' Returns a copy of the fullness '''
         return copy.copy( self._fullness )
 
 
-    def fullnessGetCol(self, col):
+    def getFullnessCol(self, col):
         ''' Return how many stones are in a specific column '''
         return self._fullness[col]
 
@@ -124,7 +125,7 @@ class FourWins:
         if lrow >= 3:
             curr = lrow - 1
             # Count how many same colored stones are under last stone
-            while self.matrixGetStone(curr, lcol) == self._currentPlayer and counter < 4:
+            while self.getStone(curr, lcol) == self._currentPlayer and counter < 4:
                 counter += 1
             if counter == 3:
                 self._winner = self._currentPlayer
@@ -137,7 +138,7 @@ class FourWins:
         # Count how many same colored stones are between sLeft and sRight
         curr = sLeft
         while curr <= sRight and counter < 4:
-            if self.matrixGetStone(lrow, curr) == self._currentPlayer:
+            if self.getStone(lrow, curr) == self._currentPlayer:
                 counter += 1
             else:
                 counter = 0
@@ -160,7 +161,7 @@ class FourWins:
         # Count amount of stones in the diagonal
         counter = 0
         while crow >= erow and ccol <= ecol and counter < 4:
-            if self.matrixGetStone(crow, ccol) == self._currentPlayer:
+            if self.getStone(crow, ccol) == self._currentPlayer:
                 counter += 1
             else:
                 counter = 0
@@ -184,7 +185,7 @@ class FourWins:
         # Count amount of stones in the diagonal
         counter = 0
         while ccol <= ecol and crow <= ecol and counter < 4:
-            if self.matrixGetStone(crow, ccol) == self._currentPlayer:
+            if self.getStone(crow, ccol) == self._currentPlayer:
                 counter += 1
             else:
                 counter = 0
