@@ -7,11 +7,9 @@ import sys, copy, random, importlib
 
 # TODOS:
 # Standard Player: Defense, "Attack" and Random placement
-# Example Player
 # GUI
 # Basic Output System
 # Interactive Player
-# Check for Winner
 # TEST TEST TEST
 # performance optimization
 
@@ -73,7 +71,6 @@ class FourWins:
 
     def _playerInit(self, playerName):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
-
         # Import and return Standard Player
         if playerName == "standard":
             mod = importlib.import_module( "StandardPlayer" )
@@ -84,8 +81,8 @@ class FourWins:
             return mod.InteractivePlayer(self)
         # Import and return Example Player
         elif playerName == "exampleName":
-            # Copy this Code and adapt it to your player
-            mod = importlib.import_module( "examplePlayer" )
+            # Copy this Code, paste it below this and adapt it to your player
+            mod = importlib.import_module( "ExamplePlayer" )
             return mod.ExamplePlayer(self)
         # In Case of not finding a Player end execution
         else:
