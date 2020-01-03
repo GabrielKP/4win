@@ -38,10 +38,11 @@ class FourWins:
     def _matrixCreate(self, cols=7, rows=7):
         ''' The Matrix shows where which stone is '''
         # This is how it is adressed:
-        # [0][0] [0][1] [0][2] ... [0][6]
-        # [1][0] ...
+        # [6][0] [6][1] [6][2] ... [6][6]
+        # [5][0] [5][1] ...        [5][6]
         # ...
-        # [6][0] ...           ... [6][6]
+        # [1][0] [1][1] ...        [1][6]
+        # [0][0] [0][1] [0][2] ... [0][6]
         return [[0] * cols for i in range(rows)]
 
 
@@ -50,9 +51,9 @@ class FourWins:
         return copy.deepcopy( self._matrix )
 
 
-    def matrixGetStone(self, col, row):
+    def matrixGetStone(self, row, col):
         ''' Returns the stone in specific row and column '''
-        return self._matrix[col][row]
+        return self._matrix[row][col]
 
 
     def _fullnessCreate(self, cols=7):
