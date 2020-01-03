@@ -9,6 +9,7 @@ import sys, copy, random, importlib
 # Standard Player: Defense, "Attack" and Random placement
 # Example Player
 # GUI
+# Basic Output System
 # Interactive Player
 # Check for Winner
 
@@ -107,6 +108,24 @@ class FourWins:
         self._fullness[pos] += 1
 
 
+    def _checkWinner(self):
+        ''' If 4 in a row, sets _winner to current player '''
+        lrow, lcol = self._lastStone
+        # Start vertical
+        counter = 0
+        # Cant be vertical 4 in the row if the last stone is not in 4th row
+        if lrow >= 3:
+            curr = lrow - 1
+            # Count how many same colored stones are under last stone
+            while self.matrixGetStone(curr, lcol) == self._currentPlayer and counter < 4:
+                counter += 1
+            if counter == 3:
+                self._winner = self._currentPlayer
+                return
+        # Horizontal
+        counter = 0
+        
+
     def _gameLoop(self):
         ''' Main Game Loop '''
 
@@ -124,7 +143,7 @@ class FourWins:
             # 4. Place the Stone
             self._placeStone( newPos )
             # Check for winner
-
+            self._checkWinner()
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
 
