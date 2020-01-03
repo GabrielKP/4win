@@ -32,3 +32,7 @@ Built modular:
 - The Player needs to have following variables: playerName
 - The Player needs to have following functions: nextTurn
 - Look at the ExamplePlayer for further information
+
+### Which functions and Variable from the FourWins class can I use?
+- You can not use any variable which is in FourWins
+- You can use all functions without a underscore "_" in front, which are in the moment: 'matrixGet, matrixGetStone, fullnessGet, gullnessGetCol, moveLegal'
