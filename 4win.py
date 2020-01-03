@@ -15,7 +15,13 @@ import sys, copy, random, importlib
 class FourWins:
     ''' Includes all Game functions for 4 wins '''
 
-    def __init__(self, playerName1="standard", playerName2="standard", ncols=7, nrows=7):
+    def __init__(self,
+                playerName1="standard",             # Playername of first player
+                playerName2="standard",             # Playername of second player
+                ncols=7,                            # Number of columns
+                nrows=7,                            # Number of rows
+                verbose=1                           # How much output on the console should be given: 0=None, 1=Basic, 2=Extrem
+                ):
         ''' Initializes the Game '''
         # Set Variables
         # The single underscore means you should NOT access those variables!
