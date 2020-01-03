@@ -167,7 +167,7 @@ class FourWins:
         if counter == 4:
             self._winner = self._currentPlayer
             return
-            
+
         ### Diagonal SW -> NE
         # Get to SW point
         ccol = max(0, lcol - 3)
