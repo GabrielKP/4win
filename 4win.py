@@ -43,6 +43,9 @@ class FourWins:
 
         self._currentPlayer = random.randint(1,2)
 
+        # Start Game
+        self._gameLoop()
+
 
     def fprint(self, message, verbosity=1):
         if verbosity < self._verbose:
@@ -102,7 +105,7 @@ class FourWins:
             return mod.ExamplePlayer(self)
         # In Case of not finding a Player end execution
         else:
-            self.fprint( "No such player {}, aborting".format(playerName), 0 )
+            self.fprint( "No such player as \"{}\", aborting".format(playerName), 0 )
             sys.exit(-1)
 
 
@@ -253,7 +256,7 @@ class FourWins:
 
 
 def main():
-    fwins = FourWins()
+    fwins = FourWins(verbose=2, playerName1="interactive", playerName2="interactive")
 
 if __name__ == "__main__":
     main()
