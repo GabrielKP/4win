@@ -90,7 +90,7 @@ class FourWins:
             sys.exit(-1)
 
 
-    def _moveLegal(self, pos):
+    def moveLegal(self, pos):
         ''' Check if Player can place another stone '''
         return 0 <= pos and pos <= 6 and self._fullness[pos] < 6
 
@@ -204,7 +204,7 @@ class FourWins:
             else:
                 newPos = self._player2.nextTurn()
             # 3. Check if move was legal, if not, other player won
-            if not self._moveLegal( newPos ):
+            if not self.moveLegal( newPos ):
                 self._winner = self._flipPlayer( self._currentPlayer )
             # 4. Place the Stone
             self._placeStone( newPos )
