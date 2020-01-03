@@ -48,7 +48,7 @@ class FourWins:
 
 
     def fprint(self, message, verbosity=1):
-        if verbosity < self._verbose:
+        if verbosity <= self._verbose:
             return print( message )
 
 
