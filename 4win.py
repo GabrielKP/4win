@@ -114,7 +114,9 @@ class FourWins:
     def _flipPlayer(self, x):
         ''' Flips player Number '''
         if x == 1:
+            self.fprint( "flipPlayer: Flipped player from {} to {}".format(1, 2), 2 )
             return 2
+        self.fprint( "flipPlayer: Flipped player from {} to {}".format(2, 1), 2 )
         return 1
 
 
@@ -122,6 +124,7 @@ class FourWins:
         ''' Places a Stone on pos in matrix '''
         self._matrix[self._fullness[pos]][pos] = self._currentPlayer
         self._lastStone = (self._fullness[pos], pos)
+        self.fprint( "placeStone: Placed Stone to {:2}, {:2}".format(self._fullness[pos], pos), 2 )
         self._fullness[pos] += 1
 
 
@@ -241,7 +244,7 @@ class FourWins:
             # 4. Place the Stone
             self._placeStone( newPos )
             # Check for winner
-            self.fprint( "Game: Entering checkWinner()", 2)
+            self.fprint( "Game: Entering checkWinner()", 2 )
             self._checkWinner()
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
