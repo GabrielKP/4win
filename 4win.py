@@ -12,6 +12,8 @@ import sys, copy, random, importlib
 # Basic Output System
 # Interactive Player
 # Check for Winner
+# TEST TEST TEST
+# performance optimization
 
 class FourWins:
     ''' Includes all Game functions for 4 wins '''
