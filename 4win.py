@@ -7,11 +7,9 @@ import sys, copy, random, importlib
 
 # TODOS:
 # Standard Player: Defense, "Attack" and Random placement
-# GUI
 # Time measurement
 # Output system refinement
 # TEST TEST TEST
-# performance optimization
 
 class FourWins:
     ''' Includes all Game functions for 4 wins '''
@@ -21,7 +19,8 @@ class FourWins:
                 playerName2="standard",             # Playername of second player
                 ncols=7,                            # Number of columns
                 nrows=7,                            # Number of rows
-                verbose=1                           # How much output on the console should be given: 0=None, 1=Basic, 2=Extrem
+                verbose=1,                          # How much output on the console should be given: 0=None, 1=Basic, 2=Extrem
+                gui=True                            # GUI
                 ):
         ''' Initializes the Game '''
         # Set Variables
@@ -43,11 +42,23 @@ class FourWins:
 
         self._currentPlayer = random.randint(1,2)
 
+        # GUI
+        self.guiactive = gui
+        if gui:
+            self.initGUI()
+
         # Start Game
         self._gameLoop()
 
 
+    def initGUI(self):
+        ''' Initiliazes GUI '''
+        mod = importlib.import_module( "gui" )
+        self.gui = mod.GUI( game=self )
+
+
     def fprint(self, message, verbosity=1):
+        ''' Prints messages depending on verbosity level'''
         if verbosity <= self._verbose:
             return print( message )
 
@@ -246,6 +257,9 @@ class FourWins:
                 self.fprint( "Game: Placement was illegal!" )
             # 4. Place the Stone
             self._placeStone( newPos )
+            # Draw Gameboard
+            if self.guiactive:
+                self.gui.update( self._lastStone, self._currentPlayer )
             # Check for winner
             self.fprint( "Game: Entering checkWinner()", 2 )
             self._checkWinner()
