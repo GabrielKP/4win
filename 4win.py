@@ -122,7 +122,7 @@ class FourWins:
 
     def moveLegal(self, pos):
         ''' Check if pos is an allowed column to place a stone in '''
-        return 0 <= pos and pos <= 6 and self._fullness[pos] < 6
+        return 0 <= pos and pos <= 6 and self._fullness[pos] <= 6
 
 
     def _flipPlayer(self, x):
@@ -186,7 +186,7 @@ class FourWins:
         crow = lrow + lcol - ccol
         # Corner case when you are too far up
         if crow >= self._nrows:
-            correction = crow - self._nrows - 1
+            correction = crow - (self._nrows - 1)
             ccol += correction
             crow -= correction
         # Determine ending fields
