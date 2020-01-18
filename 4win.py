@@ -8,7 +8,8 @@ import sys, copy, random, importlib
 # TODOS:
 # Standard Player: Defense, "Attack" and Random placement
 # Time measurement
-# Output system refinement
+# Output a Matrix
+# End winner screen
 # TEST TEST TEST
 
 class FourWins:
@@ -36,16 +37,16 @@ class FourWins:
         self._matrix = self._matrixCreate( self._ncols, self._nrows )
         self._fullness = self._fullnessCreate( self._ncols )
 
+        # Init GUI
+        self.guiactive = gui
+        if gui:
+            self.initGUI()
+
         # Init players
         self._player1 = self._playerInit(playerName1)
         self._player2 = self._playerInit(playerName2)
 
         self._currentPlayer = random.randint(1,2)
-
-        # GUI
-        self.guiactive = gui
-        if gui:
-            self.initGUI()
 
         # Start Game
         self._gameLoop()
@@ -267,6 +268,7 @@ class FourWins:
                 break
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
+
         self.fprint( "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns) )
 
 
