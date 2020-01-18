@@ -9,6 +9,8 @@ class InteractivePlayer:
 
         self.name = "Interactive Player"
         self.game = game
+        self.gui = self.game.gui
+        self.gui._initInteractive()
 
 
     def nextTurn(self):
@@ -20,7 +22,11 @@ class InteractivePlayer:
             # Get User Input
             if wrongInput:
                 print( "{} is not a valid Input! Please type an integer between 0 and 6 in a column which is not full!".format(newPos) )
-            newPos = int(input( "Place a Stone! integer 0-6: " ))
+            # Console
+            # newPos = int(input( "Place a Stone! integer 0-6: " ))
+            # GUI
+            newPos = self.gui._getInput()
+
             wrongInput = True
 
         return newPos
