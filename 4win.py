@@ -123,7 +123,7 @@ class FourWins:
 
     def moveLegal(self, pos):
         ''' Check if pos is an allowed column to place a stone in '''
-        return 0 <= pos and pos <= 6 and self._fullness[pos] <= 6
+        return isinstance(pos, int) and 0 <= pos and pos <= 6 and self._fullness[pos] <= 6
 
 
     def _flipPlayer(self, x):

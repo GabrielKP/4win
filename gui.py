@@ -32,17 +32,31 @@ class GUI:
 
     def _initInteractive(self):
         ''' Sets up variables for GUI '''
-        self.canvas.bind("<Button-1>", self._getMouseX)
+        # Bind Mouse and Keyboard
+        self.canvas.bind("<Button-1>", self._mousePress)
         self.canvas.config(cursor="crosshair")
+        self.root.bind("<Key>", self._keyPress)
         # Flag to know when we are waiting
         self.waitInput = False
 
 
-    def _getMouseX(self, event):
+    def _keyPress(self, event):
+        ''' Handles Key Press '''
+        if self.waitInput:
+            # Try to convert, if not put a char in variable to get into error handling in InteractivePlayer
+            try:
+                self.inputCol = int(event.char)
+            except Exception:
+                self.inputCol = even.char
+            # Unmark Flag
+            self.waitInput = False
+
+
+    def _mousePress(self, event):
         ''' Returns X position of Mouse when Button pressed '''
         if self.waitInput:
             # Compute Column from mouseclick
-            self.mouseCol = int( event.x / self.circlesize)
+            self.inputCol = int( event.x / self.circlesize)
             # Unmark Flag
             self.waitInput = False
 
@@ -52,5 +66,5 @@ class GUI:
         self.waitInput = True
         while self.waitInput:
             self.canvas.update()
-        return self.mouseCol
+        return self.inputCol
 
