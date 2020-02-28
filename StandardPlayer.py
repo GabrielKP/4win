@@ -6,13 +6,11 @@ import random
 class StandardPlayer:
     ''' A basic 4wins player '''
 
-    def __init__(self, game):
+    def __init__(self, game, pnumber):
         ''' Init function '''
 
         self.name = "Standard Player"
         self.game = game
-        self.pnumber = pnumber
-        self._lastOwnPlacedCol = -1
 
 
     def nextTurn(self):
