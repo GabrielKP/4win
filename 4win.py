@@ -85,6 +85,11 @@ class FourWins:
         return self._matrix[row][col]
 
 
+    def getLastStone(self):
+        ''' Returns last placed Stone '''
+        return self._lastStone
+
+
     def _fullnessCreate(self, cols):
         ''' The fullness shows how many stones are in a column of the matrix '''
         return [0] * cols
