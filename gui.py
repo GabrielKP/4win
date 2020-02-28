@@ -47,7 +47,7 @@ class GUI:
             try:
                 self.inputCol = int(event.char)
             except Exception:
-                self.inputCol = even.char
+                self.inputCol = event.char
             # Unmark Flag
             self.waitInput = False
 

@@ -4,11 +4,12 @@
 class InteractivePlayer:
     ''' A player to allow a human to play the 4wins game '''
 
-    def __init__(self, game):
+    def __init__(self, game, pnumber):
         ''' Init function '''
 
         self.name = "Interactive Player"
         self.game = game
+        self.pnumber = pnumber
         self.gui = self.game.gui
         self.gui._initInteractive()
 

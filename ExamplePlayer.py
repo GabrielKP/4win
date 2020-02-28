@@ -4,7 +4,7 @@
 class ExamplePlayer:
     ''' A 4wins player template '''
 
-    def __init__(self, game):
+    def __init__(self, game, pnumber):
         ''' Init function '''
         # This function will be called once at the start
         # Here you initialize your player, set up your data structures and
@@ -13,6 +13,7 @@ class ExamplePlayer:
         # Basic Variable setting
         self.name = "Example Player"
         self.game = game
+        self.pnumber = pnumber
 
         # Do your init stuff here
 

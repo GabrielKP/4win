@@ -31,7 +31,7 @@ class FourWins:
         self._verbose = verbose
         self._winner = 0                 # # 0 not determined, 1, 2 if respective player won, 3 for a draw
         self._turns = 0                  # Number of turns
-        self._lastStone = None           # Tuple of last placed Stone
+        self._lastStone = None           # Tuple of last placed Stone (row, col)
         self._ncols = ncols
         self._nrows = nrows
         self._matrix = self._matrixCreate( self._ncols, self._nrows )
@@ -43,8 +43,8 @@ class FourWins:
             self.initGUI()
 
         # Init players
-        self._player1 = self._playerInit(playerName1)
-        self._player2 = self._playerInit(playerName2)
+        self._player1 = self._playerInit(playerName1, 1)
+        self._player2 = self._playerInit(playerName2, 2)
 
         self._currentPlayer = random.randint(1,2)
 
@@ -105,21 +105,21 @@ class FourWins:
         return self._fullness[col]
 
 
-    def _playerInit(self, playerName):
+    def _playerInit(self, playerName, pnumber):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
         # Import and return Standard Player
         if playerName == "standard":
             mod = importlib.import_module( "StandardPlayer" )
-            return mod.StandardPlayer(self)
+            return mod.StandardPlayer(self, pnumber)
         # Import and return an Interactive Player
         elif playerName == "interactive":
             mod = importlib.import_module( "InteractivePlayer" )
-            return mod.InteractivePlayer(self)
+            return mod.InteractivePlayer(self, pnumber)
         # Import and return Example Player
         elif playerName == "exampleName":
             # Copy this Code, paste it below this and adapt it to your player
             mod = importlib.import_module( "ExamplePlayer" )
-            return mod.ExamplePlayer(self)
+            return mod.ExamplePlayer(self, pnumber)
         # In Case of not finding a Player end execution
         else:
             self.fprint( "No such player as \"{}\", aborting".format(playerName), 0 )
