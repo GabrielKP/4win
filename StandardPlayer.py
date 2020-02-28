@@ -11,6 +11,8 @@ class StandardPlayer:
 
         self.name = "Standard Player"
         self.game = game
+        self.pnumber = pnumber
+        self._lastOwnPlacedCol = -1
 
 
     def nextTurn(self):
