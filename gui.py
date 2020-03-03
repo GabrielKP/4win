@@ -68,3 +68,11 @@ class GUI:
             self.canvas.update()
         return self.inputCol
 
+
+    def _displayMessage(self, message):
+        ''' Displays message prominently on screen '''
+        x = self.canvas.winfo_width() // 2
+        y = self.canvas.winfo_height() - (self.canvas.winfo_height() // 10 )
+        font = ('Arial',20,'bold')
+        self.canvas.create_text(x, y, text=message, fill="black", font=font)
+
