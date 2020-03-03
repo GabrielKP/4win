@@ -73,6 +73,6 @@ class GUI:
         ''' Displays message prominently on screen '''
         x = self.canvas.winfo_width() // 2
         y = self.canvas.winfo_height() - (self.canvas.winfo_height() // 10 )
-        font = ('Arial',20,'bold')
+        font = ('Arial',24,'bold')
         self.canvas.create_text(x, y, text=message, fill="black", font=font)
 
