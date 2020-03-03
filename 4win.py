@@ -160,7 +160,7 @@ class FourWins:
         if lrow >= 3:
             curr = lrow - 1
             # Count how many same colored stones are under last stone
-            while self.getStone(curr, lcol) == self._currentPlayer and counter < 4:
+            while self.getStone(curr, lcol) == self._currentPlayer and counter < 3:
                 counter += 1
                 curr -= 1
             if counter == 3:
@@ -280,7 +280,7 @@ class FourWins:
 
 
 def main():
-    fwins = FourWins(verbose=2, playerName1="interactive", playerName2="interactive")
+    fwins = FourWins(verbose=1, playerName1="interactive", playerName2="interactive")
 
 if __name__ == "__main__":
     main()
