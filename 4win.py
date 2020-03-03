@@ -58,6 +58,7 @@ class FourWins:
 
     def fprint(self, message, verbosity=1):
         ''' Prints messages depending on verbosity level'''
+        # 0 if always printed, 1 for normal, 2 for extended
         if verbosity <= self._verbose:
             return print( message )
 
@@ -132,9 +133,9 @@ class FourWins:
     def _flipPlayer(self, x):
         ''' Flips player Number '''
         if x == 1:
-            self.fprint( "flipPlayer: Flipped player from {} to {}".format(1, 2), 2 )
+            self.fprint( "flipPlayer: Flipped player from {} to {}".format(1, 2), 3 )
             return 2
-        self.fprint( "flipPlayer: Flipped player from {} to {}".format(2, 1), 2 )
+        self.fprint( "flipPlayer: Flipped player from {} to {}".format(2, 1), 3 )
         return 1
 
 
@@ -142,14 +143,14 @@ class FourWins:
         ''' Places a Stone on pos in matrix '''
         self._matrix[self._fullness[pos]][pos] = self._currentPlayer
         self._lastStone = (self._fullness[pos], pos)
-        self.fprint( "placeStone: Placed Stone to {:2}, {:2}".format(self._fullness[pos], pos), 2 )
+        self.fprint( "placeStone: Placed Stone to {:2}, {:2}".format(self._fullness[pos], pos), 3 )
         self._fullness[pos] += 1
 
 
     def _checkWinner(self):
         ''' If 4 in a row, sets _winner to current player '''
         lrow, lcol = self._lastStone
-        self.fprint( "checkWinner: Laststone {:2}, {:2}".format(lrow, lcol), 2 )
+        self.fprint( "checkWinner: Laststone {:2}, {:2}".format(lrow, lcol), 3 )
 
         ### Vertical
         counter = 0
@@ -162,9 +163,9 @@ class FourWins:
                 curr -= 1
             if counter == 3:
                 self._winner = self._currentPlayer
-                self.fprint( "checkWinner: Player {} won: 4 vertical stones starting in position {:2}, {:2}".format(self._currentPlayer, curr + 1, lcol), 2 )
+                self.fprint( "checkWinner: Player {} won: 4 vertical stones starting in position {:2}, {:2}".format(self._currentPlayer, curr + 1, lcol), 3 )
                 return
-        self.fprint( "checkWinner: Did not find 4 in a vertical row!", 2 )
+        self.fprint( "checkWinner: Did not find 4 in a vertical row!", 3 )
 
         ### Horizontal
         counter = 0
@@ -180,9 +181,9 @@ class FourWins:
             curr += 1
         if counter == 4:
             self._winner = self._currentPlayer
-            self.fprint( "checkWinner: Player {} won: 4 horizontal stones starting in position {:2}, {:2}".format(self._currentPlayer, lrow, curr - 1), 2 )
+            self.fprint( "checkWinner: Player {} won: 4 horizontal stones starting in position {:2}, {:2}".format(self._currentPlayer, lrow, curr - 1), 3 )
             return
-        self.fprint( "checkWinner: Did not find 4 in a horizontal row!", 2 )
+        self.fprint( "checkWinner: Did not find 4 in a horizontal row!", 3 )
 
         ### Diagonal NW -> SE
         # Get to NW point
@@ -207,9 +208,9 @@ class FourWins:
             ccol += 1
         if counter == 4:
             self._winner = self._currentPlayer
-            self.fprint( "checkWinner: Player {} won: 4 diagonal SE to NW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow + 1, ccol - 1), 2 )
+            self.fprint( "checkWinner: Player {} won: 4 diagonal SE to NW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow + 1, ccol - 1), 3 )
             return
-        self.fprint( "checkWinner: Did not find 4 in a diagonal NW to SE row!", 2 )
+        self.fprint( "checkWinner: Did not find 4 in a diagonal NW to SE row!", 3 )
 
         ### Diagonal SW -> NE
         # Get to SW point
@@ -233,11 +234,11 @@ class FourWins:
             ccol += 1
         if counter == 4:
             self._winner = self._currentPlayer
-            self.fprint( "checkWinner: Player {} won: 4 diagonal NE to SW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow - 1, ccol - 1), 2 )
+            self.fprint( "checkWinner: Player {} won: 4 diagonal NE to SW stones starting in position {:2}, {:2}".format(self._currentPlayer, crow - 1, ccol - 1), 3 )
             return
-        self.fprint( "checkWinner: Did not find 4 in a diagonal SW to NE row!", 2 )
+        self.fprint( "checkWinner: Did not find 4 in a diagonal SW to NE row!", 3 )
         # No winner was found
-        self.fprint( "checkWinner: Did not find 4 in the row.", 2 )
+        self.fprint( "checkWinner: Did not find 4 in the row.", 3 )
         return
 
 
@@ -261,11 +262,12 @@ class FourWins:
                 self.fprint( "Game: Placement was illegal!" )
             # 4. Place the Stone
             self._placeStone( newPos )
-            # Draw Gameboard
+            # Draw Gameboard and print matrix
+            
             if self.guiactive:
                 self.gui.update( self._lastStone, self._currentPlayer )
             # Check for winner
-            self.fprint( "Game: Entering checkWinner()", 2 )
+            self.fprint( "Game: Entering checkWinner()", 3 )
             self._checkWinner()
             if self._winner != 0:
                 break
