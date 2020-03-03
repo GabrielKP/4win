@@ -109,15 +109,15 @@ class FourWins:
     def _playerInit(self, playerName, pnumber):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
         # Import and return Standard Player
-        if playerName == "standard":
+        if playerName == "Standard":
             mod = importlib.import_module( "StandardPlayer" )
             return mod.StandardPlayer(self, pnumber)
         # Import and return an Interactive Player
-        elif playerName == "interactive":
+        elif playerName == "Interactive":
             mod = importlib.import_module( "InteractivePlayer" )
             return mod.InteractivePlayer(self, pnumber)
         # Import and return Example Player
-        elif playerName == "exampleName":
+        elif playerName == "ExampleName":
             # Copy this Code, paste it below this and adapt it to your player
             mod = importlib.import_module( "ExamplePlayer" )
             return mod.ExamplePlayer(self, pnumber)
@@ -280,7 +280,7 @@ class FourWins:
 
 
 def main():
-    fwins = FourWins(verbose=1, playerName1="interactive", playerName2="interactive")
+    fwins = FourWins(verbose=1, playerName1="Standard", playerName2="Interactive")
 
 if __name__ == "__main__":
     main()
