@@ -17,16 +17,27 @@ class StandardPlayer:
 
     def canWinAtPos(self, lrow, lcol):
         ''' Check if Player can win if stone placed at lrow, lcol '''
+        # Check Vertical
+        counter = 0
+        if lrow >= 3:
+            crow = lrow - 1
+            while self.game.getStone(crow, lcol) == self.pnumber and counter < 3:
+                counter += 1
+                crow -= 1
+            if counter == 3:
+                return True
+
         # Check Horizontal
         endCol = min(6, lcol + 3)
         ccol = max(0, lcol - 3)
-        count = 0
-        while ccol < endCol and count < 4:
+        counter = 0
+        while ccol < endCol and counter < 4:
             if self.game.getStone(lrow, ccol) == self.pnumber or ccol == lcol:
-                count += 1
+                counter += 1
             else:
-                count = 0
-        if count == 4:
+                counter = 0
+            ccol += 1
+        if counter == 4:
             return True
 
         # Check Diagonal UPLEFT -> DOWNRIGHT (NW -> SE)
