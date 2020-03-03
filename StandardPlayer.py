@@ -15,13 +15,13 @@ class StandardPlayer:
         self._lastOwnPlacedCol = -1
 
 
-    def canWinAtPos(self, lrow, lcol):
-        ''' Check if Player can win if stone placed at lrow, lcol '''
+    def canWinAtPos(self, lrow, lcol, player):
+        ''' Check if player can win if stone placed at lrow, lcol '''
         # Check Vertical
         counter = 0
         if lrow >= 3:
             crow = lrow - 1
-            while self.game.getStone(crow, lcol) == self.pnumber and counter < 3:
+            while self.game.getStone(crow, lcol) == player and counter < 3:
                 counter += 1
                 crow -= 1
             if counter == 3:
@@ -32,7 +32,7 @@ class StandardPlayer:
         ccol = max(0, lcol - 3)
         counter = 0
         while ccol < endCol and counter < 4:
-            if self.game.getStone(lrow, ccol) == self.pnumber or ccol == lcol:
+            if self.game.getStone(lrow, ccol) == player or ccol == lcol:
                 counter += 1
             else:
                 counter = 0
@@ -55,7 +55,7 @@ class StandardPlayer:
         # Count amount of stones in the diagonal
         counter = 0
         while crow >= erow and ccol <= ecol and counter < 4:
-            if self.game.getStone(crow, ccol) == self.game.pnumber or ccol == lcol:
+            if self.game.getStone(crow, ccol) == player or ccol == lcol:
                 counter += 1
             else:
                 counter = 0
@@ -78,7 +78,7 @@ class StandardPlayer:
         # Count amount of stones in the diagonal
         counter = 0
         while ccol <= ecol and crow <= ecol and counter < 4:
-            if self.game.getStone(crow, ccol) == self.pnumber or ccol == lcol:
+            if self.game.getStone(crow, ccol) == player or ccol == lcol:
                 counter += 1
             else:
                 counter = 0
@@ -91,16 +91,12 @@ class StandardPlayer:
 
     def tryWin(self):
         ''' Returns the column to place stone, when player can win there, if not -1 '''
-        # Nothing of if you are first to place a stone
-        if self.game.getLastStone == None:
-            return -1
-
         # Check every position stone can be placed in
         for col in range(0, self.game._ncols):
             row = self.game.getFullnessCol(col)
             if row == self.game._nrows:
                 continue
-            if self.canWinAtPos(row, col):
+            if self.canWinAtPos(row, col, self.pnumber):
                 return col
 
         return -1
@@ -108,6 +104,16 @@ class StandardPlayer:
 
     def tryDef(self):
         ''' Returns col if Player needs to defend from other player placing 4 in the row, if not -1 '''
+        enemy = (self.pnumber % 2) + 1
+        # Check every position enemy can place stone in
+        for col in range(0, self.game._ncols):
+            row = self.game.getFullnessCol(col)
+            if row == self.game._nrows:
+                continue
+            if self.canWinAtPos(row, col, enemy):
+                return col
+
+        return -1
 
 
     def nextTurn(self):
