@@ -6,10 +6,8 @@
 import sys, copy, random, importlib
 
 # TODOS:
-# Standard Player: Defense, "Attack" and Random placement
 # Time measurement
 # Output a Matrix
-# End winner screen
 # TEST TEST TEST
 # When full, call a draw
 
@@ -275,7 +273,11 @@ class FourWins:
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
 
-        self.fprint( "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns) )
+        winMessage = "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns)
+        self.fprint( winMessage )
+        if self.guiactive:
+            self.gui._displayMessage(winMessage[6:])
+            self.gui._getInput()
 
 
 
