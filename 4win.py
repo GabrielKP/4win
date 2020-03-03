@@ -286,6 +286,8 @@ class FourWins:
                 self.gui._displayMessage(winMessage[6:])
                 self.gui._getInput()
 
+        return self._winner
+
 
 
 def main():
