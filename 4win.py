@@ -7,7 +7,6 @@ import sys, copy, random, importlib
 
 # TODOS:
 # Time measurement
-# Output a Matrix
 # TEST TEST TEST
 
 class FourWins:
@@ -73,6 +72,11 @@ class FourWins:
         # [0][0] [0][1] [0][2] ... [0][6]
         return [[0] * cols for i in range(rows)]
 
+
+    def _matrixPrint(self):
+        ''' Prints the entire Matrix '''
+        message = '\n'.join([' '.join(str(x) for x in row) for row in reversed(self._matrix)])
+        self.fprint(message, 2)
 
     def getMatrix(self):
         ''' Returns a copy of the Matrix '''
@@ -263,7 +267,7 @@ class FourWins:
             # 4. Place the Stone
             self._placeStone( newPos )
             # Draw Gameboard and print matrix
-            
+            self._matrixPrint()
             if self.guiactive:
                 self.gui.update( self._lastStone, self._currentPlayer )
             # Check for winner
