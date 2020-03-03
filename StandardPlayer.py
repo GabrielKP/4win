@@ -15,25 +15,6 @@ class StandardPlayer:
         self._lastOwnPlacedCol = -1
 
 
-    def nextTurn(self):
-        ''' Returns col in which the next stone should be placed '''
-        winCol = self.tryWin()
-        if winCol != -1:
-            self._lastOwnPlacedCol = winCol
-            return winCol
-
-        defCol = self.tryDef()
-        if defCol != -1:
-            self._lastOwnPlacedCol = defCol
-            return defCol
-
-        newPos = -1
-        while not self.game.moveLegal(newPos):
-            newPos = random.randint(0,6)
-        self._lastOwnPlacedCol = newPos
-        return newPos
-
-
     def canWinAtPos(self, lrow, lcol):
         ''' Check if Player can win if stone placed at lrow, lcol '''
         # Check Horizontal
