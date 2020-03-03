@@ -9,7 +9,6 @@ import sys, copy, random, importlib
 # Time measurement
 # Output a Matrix
 # TEST TEST TEST
-# When full, call a draw
 
 class FourWins:
     ''' Includes all Game functions for 4 wins '''
@@ -245,7 +244,7 @@ class FourWins:
     def _gameLoop(self):
         ''' Main Game Loop '''
         # Execute each turn in this loop
-        while( self._winner == 0 ):
+        while( self._winner == 0 and self._turns < 49):
             # 1. Increment Turn
             self._turns +=1
             self.fprint( "Game: -- Turn {:2} --".format(self._turns) )
@@ -273,11 +272,19 @@ class FourWins:
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
 
-        winMessage = "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns)
-        self.fprint( winMessage )
-        if self.guiactive:
-            self.gui._displayMessage(winMessage[6:])
-            self.gui._getInput()
+        if self._turns == 49:
+            self._winner = 3
+            drawMessage = "Game: Draw! Nobody looses or wins!"
+            self.fprint( drawMessage )
+            if self.guiactive:
+                self.gui._displayMessage(drawMessage[6:])
+                self.gui_getInput()
+        else:
+            winMessage = "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns)
+            self.fprint( winMessage )
+            if self.guiactive:
+                self.gui._displayMessage(winMessage[6:])
+                self.gui._getInput()
 
 
 
