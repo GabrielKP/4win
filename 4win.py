@@ -11,6 +11,7 @@ import sys, copy, random, importlib
 # Output a Matrix
 # End winner screen
 # TEST TEST TEST
+# When full, call a draw
 
 class FourWins:
     ''' Includes all Game functions for 4 wins '''
@@ -219,7 +220,7 @@ class FourWins:
         crow = lrow - lcol + ccol
         # Corner case when you are too far down
         if crow < 0:
-            ccol += crow
+            ccol -= crow
             crow = 0
         # Determine ending col / row for check
         erow = min(self._nrows - 1, lrow + 3)
