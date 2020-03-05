@@ -286,7 +286,7 @@ class FourWins:
             self.fprint( drawMessage )
             if self.guiactive:
                 self.gui._displayMessage(drawMessage[6:])
-                self.gui_getInput()
+                self.gui._getInput()
         else:
             winMessage = "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns)
             self.fprint( winMessage )
