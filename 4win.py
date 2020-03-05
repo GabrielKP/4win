@@ -34,6 +34,8 @@ class FourWins:
         self._matrix = self._matrixCreate( self._ncols, self._nrows )
         self._fullness = self._fullnessCreate( self._ncols )
 
+        print("I will win!")
+
         # Init GUI
         self.guiactive = gui
         if gui:
