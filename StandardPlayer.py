@@ -3,7 +3,7 @@
 
 import random
 
-class StandardPlayer:
+class Player:
     ''' A basic 4wins player '''
 
     def __init__(self, game, pnumber):
@@ -12,7 +12,6 @@ class StandardPlayer:
         self.name = "Standard Player"
         self.game = game
         self.pnumber = pnumber
-        self._lastOwnPlacedCol = -1
 
 
     def canWinAtPos(self, lrow, lcol, player):
@@ -31,7 +30,7 @@ class StandardPlayer:
         endCol = min(6, lcol + 3)
         ccol = max(0, lcol - 3)
         counter = 0
-        while ccol < endCol and counter < 4:
+        while ccol <= endCol and counter < 4:
             if self.game.getStone(lrow, ccol) == player or ccol == lcol:
                 counter += 1
             else:
@@ -45,8 +44,8 @@ class StandardPlayer:
         ccol = max(0, lcol - 3)
         crow = lrow + lcol - ccol
         # Corner case when you are too far up
-        if crow >= self.game._nrows:
-            correction = crow - (self.game._nrows - 1)
+        if crow >= 7:
+            correction = crow - 6
             ccol += correction
             crow -= correction
         # Determine ending fields
@@ -73,8 +72,8 @@ class StandardPlayer:
             ccol -= crow
             crow = 0
         # Determine ending col / row for check
-        erow = min(self.game._nrows - 1, lrow + 3)
-        ecol = min(self.game._ncols - 1, lcol + 3)
+        erow = min(6, lrow + 3)
+        ecol = min(6, lcol + 3)
         # Count amount of stones in the diagonal
         counter = 0
         while ccol <= ecol and crow <= ecol and counter < 4:
@@ -94,7 +93,7 @@ class StandardPlayer:
         # Check every position stone can be placed in
         for col in range(0, self.game._ncols):
             row = self.game.getFullnessCol(col)
-            if row == self.game._nrows:
+            if row == 7:
                 continue
             if self.canWinAtPos(row, col, self.pnumber):
                 return col
@@ -108,7 +107,7 @@ class StandardPlayer:
         # Check every position enemy can place stone in
         for col in range(0, self.game._ncols):
             row = self.game.getFullnessCol(col)
-            if row == self.game._nrows:
+            if row == 7:
                 continue
             if self.canWinAtPos(row, col, enemy):
                 return col
@@ -120,16 +119,13 @@ class StandardPlayer:
         ''' Returns col in which the next stone should be placed '''
         winCol = self.tryWin()
         if winCol != -1:
-            self._lastOwnPlacedCol = winCol
             return winCol
 
         defCol = self.tryDef()
         if defCol != -1:
-            self._lastOwnPlacedCol = defCol
             return defCol
 
         newPos = -1
         while not self.game.moveLegal(newPos):
             newPos = random.randint(0,6)
-        self._lastOwnPlacedCol = newPos
         return newPos

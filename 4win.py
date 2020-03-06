@@ -34,27 +34,21 @@ class FourWins:
         self._matrix = self._matrixCreate( self._ncols, self._nrows )
         self._fullness = self._fullnessCreate( self._ncols )
 
-        print("I will win!")
-
         # Init GUI
         self.guiactive = gui
+        self._gui = None
         if gui:
-            self.initGUI()
+            self._initGUI()
 
         # Init players
         self._player1 = self._playerInit(playerName1, 1)
         self._player2 = self._playerInit(playerName2, 2)
 
-        self._currentPlayer = random.randint(1,2)
+        # Player 1 always begins
+        self._currentPlayer = 1
 
         # Start Game
         self._gameLoop()
-
-
-    def initGUI(self):
-        ''' Initiliazes GUI '''
-        mod = importlib.import_module( "gui" )
-        self.gui = mod.GUI( game=self )
 
 
     def fprint(self, message, verbosity=1):
@@ -62,6 +56,62 @@ class FourWins:
         # 0 if always printed, 1 for normal, 2 for extended
         if verbosity <= self._verbose:
             return print( message )
+
+
+    def getMatrix(self):
+        ''' Returns a copy of the Matrix '''
+        return copy.deepcopy( self._matrix )
+
+
+    def getStone(self, row, col):
+        ''' Returns the stone in specific row and column '''
+        return self._matrix[row][col]
+
+
+    def getLastStone(self):
+        ''' Returns last placed Stone '''
+        return self._lastStone
+
+
+    def getFullness(self):
+        ''' Returns a copy of the fullness '''
+        return copy.copy( self._fullness )
+
+
+    def getFullnessCol(self, col):
+        ''' Return how many stones are in a specific column '''
+        return self._fullness[col]
+
+
+    def getTurns(self):
+        ''' Returns how many turns have happened already '''
+        return self._turns
+
+
+    def moveLegal(self, pos):
+        ''' Check if pos is an allowed column to place a stone in '''
+        return isinstance(pos, int) and 0 <= pos and pos <= 6 and self._fullness[pos] <= 6
+
+
+    def _initGUI(self):
+        ''' Initiliazes GUI '''
+        mod = importlib.import_module( "gui" )
+        self._gui = mod.GUI( game=self )
+
+
+    def _playerInit(self, playerName, pnumber):
+        ''' Initializes and imports Player Object, respective player file needs to be included above '''
+        # Import and return Standard Player
+        try:
+            if playerName == "InteractivePlayer":
+                mod = importlib.import_module( playerName )
+                return mod.Player(self, pnumber, self._gui)
+            else:
+                mod = importlib.import_module( playerName )
+                return mod.Player(self, pnumber)
+        except:
+            self.fprint( "No such player as \"{}\", aborting".format(playerName), 0 )
+            sys.exit(-1)
 
 
     def _matrixCreate(self, cols, rows):
@@ -80,64 +130,10 @@ class FourWins:
         message = '\n'.join([' '.join(str(x) for x in row) for row in reversed(self._matrix)])
         self.fprint(message, 2)
 
-    def getMatrix(self):
-        ''' Returns a copy of the Matrix '''
-        return copy.deepcopy( self._matrix )
-
-
-    def getStone(self, row, col):
-        ''' Returns the stone in specific row and column '''
-        return self._matrix[row][col]
-
-
-    def getLastStone(self):
-        ''' Returns last placed Stone '''
-        return self._lastStone
-
 
     def _fullnessCreate(self, cols):
         ''' The fullness shows how many stones are in a column of the matrix '''
         return [0] * cols
-
-
-    def getFullness(self):
-        ''' Returns a copy of the fullness '''
-        return copy.copy( self._fullness )
-
-
-    def getFullnessCol(self, col):
-        ''' Return how many stones are in a specific column '''
-        return self._fullness[col]
-
-
-    def _playerInit(self, playerName, pnumber):
-        ''' Initializes and imports Player Object, respective player file needs to be included above '''
-        # Import and return Standard Player
-        if playerName == "Standard":
-            mod = importlib.import_module( "StandardPlayer" )
-            return mod.StandardPlayer(self, pnumber)
-        # Import and return an Interactive Player
-        elif playerName == "Interactive":
-            mod = importlib.import_module( "InteractivePlayer" )
-            return mod.InteractivePlayer(self, pnumber)
-        # Import and return Example Player
-        elif playerName == "ExampleName":
-            # Copy this Code, paste it below this and adapt it to your player
-            mod = importlib.import_module( "ExamplePlayer" )
-            return mod.ExamplePlayer(self, pnumber)
-        elif playerName == "Janek":
-            # Copy this Code, paste it below this and adapt it to your player
-            mod = importlib.import_module( "JanekPlayer" )
-            return mod.ExamplePlayer(self, pnumber)
-        # In Case of not finding a Player end execution
-        else:
-            self.fprint( "No such player as \"{}\", aborting".format(playerName), 0 )
-            sys.exit(-1)
-
-
-    def moveLegal(self, pos):
-        ''' Check if pos is an allowed column to place a stone in '''
-        return isinstance(pos, int) and 0 <= pos and pos <= 6 and self._fullness[pos] <= 6
 
 
     def _flipPlayer(self, x):
@@ -275,7 +271,7 @@ class FourWins:
             # Draw Gameboard and print matrix
             self._matrixPrint()
             if self.guiactive:
-                self.gui.update( self._lastStone, self._currentPlayer )
+                self._gui.update( self._lastStone, self._currentPlayer )
             # Check for winner
             self.fprint( "Game: Entering checkWinner()", 3 )
             self._checkWinner()
@@ -289,21 +285,21 @@ class FourWins:
             drawMessage = "Game: Draw! Nobody looses or wins!"
             self.fprint( drawMessage )
             if self.guiactive:
-                self.gui._displayMessage(drawMessage[6:])
-                self.gui._getInput()
+                self._gui._displayMessage(drawMessage[6:])
+                self._gui._getInput()
         else:
             winMessage = "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns)
             self.fprint( winMessage )
             if self.guiactive:
-                self.gui._displayMessage(winMessage[6:])
-                self.gui._getInput()
+                self._gui._displayMessage(winMessage[6:])
+                self._gui._getInput()
 
         return self._winner
 
 
 
 def main():
-    fwins = FourWins(verbose=1, playerName1="Standard", playerName2="Interactive")
+    FourWins(verbose=3, playerName1="StandardPlayer", playerName2="InteractivePlayer", gui=True)
 
 if __name__ == "__main__":
     main()
