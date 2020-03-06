@@ -108,6 +108,11 @@ class FourWins:
         return self._fullness[col]
 
 
+    def getTurns(self):
+        ''' Returns how many turns have happened already '''
+        return self._turns
+
+
     def _playerInit(self, playerName, pnumber):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
         # Import and return Standard Player
