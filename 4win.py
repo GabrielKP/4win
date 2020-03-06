@@ -43,7 +43,7 @@ class FourWins:
         self._player1 = self._playerInit(playerName1, 1)
         self._player2 = self._playerInit(playerName2, 2)
 
-        # Player 1 always
+        # Player 1 always begins
         self._currentPlayer = 1
 
         # Start Game
