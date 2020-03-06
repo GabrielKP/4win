@@ -53,7 +53,7 @@ class FourWins:
     def _initGUI(self):
         ''' Initiliazes GUI '''
         mod = importlib.import_module( "gui" )
-        self.gui = mod.GUI( game=self )
+        self._gui = mod.GUI( game=self )
 
 
     def fprint(self, message, verbosity=1):
@@ -275,7 +275,7 @@ class FourWins:
             # Draw Gameboard and print matrix
             self._matrixPrint()
             if self.guiactive:
-                self.gui.update( self._lastStone, self._currentPlayer )
+                self._gui.update( self._lastStone, self._currentPlayer )
             # Check for winner
             self.fprint( "Game: Entering checkWinner()", 3 )
             self._checkWinner()
@@ -289,21 +289,21 @@ class FourWins:
             drawMessage = "Game: Draw! Nobody looses or wins!"
             self.fprint( drawMessage )
             if self.guiactive:
-                self.gui._displayMessage(drawMessage[6:])
-                self.gui._getInput()
+                self._gui._displayMessage(drawMessage[6:])
+                self._gui._getInput()
         else:
             winMessage = "Game: Player {}: \"{}\" wins after {:2} turns!".format(self._currentPlayer, self._player1.name if self._currentPlayer == 1 else self._player2.name, self._turns)
             self.fprint( winMessage )
             if self.guiactive:
-                self.gui._displayMessage(winMessage[6:])
-                self.gui._getInput()
+                self._gui._displayMessage(winMessage[6:])
+                self._gui._getInput()
 
         return self._winner
 
 
 
 def main():
-    fwins = FourWins(verbose=1, playerName1="Standard", playerName2="Interactive")
+    FourWins(verbose=1, playerName1="Standard", playerName2="Interactive", gui=False)
 
 if __name__ == "__main__":
     main()
