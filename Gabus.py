@@ -6,6 +6,7 @@ import random
 class Player:
     ''' A basic 4wins player '''
 
+
     def __init__(self, game, pnumber):
         ''' Init function '''
 
@@ -50,7 +51,7 @@ class Player:
             crow -= correction
         # Determine ending fields
         erow = max(0, lrow - 3)
-        ecol = min(self.game._ncols - 1, lcol + 3)
+        ecol = min(6, lcol + 3)
         # Count amount of stones in the diagonal
         counter = 0
         while crow >= erow and ccol <= ecol and counter < 4:
@@ -91,7 +92,7 @@ class Player:
     def tryWin(self):
         ''' Returns the column to place stone, when player can win there, if not -1 '''
         # Check every position stone can be placed in
-        for col in range(0, self.game._ncols):
+        for col in range(0, 7):
             row = self.game.getFullnessCol(col)
             if row == 7:
                 continue
@@ -105,7 +106,7 @@ class Player:
         ''' Returns col if Player needs to defend from other player placing 4 in the row, if not -1 '''
         enemy = (self.pnumber % 2) + 1
         # Check every position enemy can place stone in
-        for col in range(0, self.game._ncols):
+        for col in range(0, 7):
             row = self.game.getFullnessCol(col)
             if row == 7:
                 continue
@@ -113,6 +114,19 @@ class Player:
                 return col
 
         return -1
+
+
+    def findBadPlaces(self):
+        ''' Returns a set of places where when stone placed, enemy wins'''
+        ret = set()
+        enemy = (self.pnumber % 2) + 1
+        for col in range(0, 7):
+            row = self.game.getFullnessCol(col) + 1
+            if row >= 7:
+                continue
+            if self.canWinAtPos(row, col, enemy):
+                ret.add(col)
+        return ret
 
 
     def nextTurn(self):
@@ -124,6 +138,9 @@ class Player:
         defCol = self.tryDef()
         if defCol != -1:
             return defCol
+
+        # Set of columns not place stones in
+        badPlaces = self.findBadPlaces()
 
         newPos = -1
         while not self.game.moveLegal(newPos):
