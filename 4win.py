@@ -125,6 +125,10 @@ class FourWins:
             # Copy this Code, paste it below this and adapt it to your player
             mod = importlib.import_module( "ExamplePlayer" )
             return mod.ExamplePlayer(self, pnumber)
+        elif playerName == "Janek":
+            # Copy this Code, paste it below this and adapt it to your player
+            mod = importlib.import_module( "JanekPlayer" )
+            return mod.ExamplePlayer(self, pnumber)
         # In Case of not finding a Player end execution
         else:
             self.fprint( "No such player as \"{}\", aborting".format(playerName), 0 )
