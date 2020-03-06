@@ -34,12 +34,10 @@ class FourWins:
         self._matrix = self._matrixCreate( self._ncols, self._nrows )
         self._fullness = self._fullnessCreate( self._ncols )
 
-        print("I will win!")
-
         # Init GUI
         self.guiactive = gui
         if gui:
-            self.initGUI()
+            self._initGUI()
 
         # Init players
         self._player1 = self._playerInit(playerName1, 1)
@@ -51,7 +49,7 @@ class FourWins:
         self._gameLoop()
 
 
-    def initGUI(self):
+    def _initGUI(self):
         ''' Initiliazes GUI '''
         mod = importlib.import_module( "gui" )
         self.gui = mod.GUI( game=self )
