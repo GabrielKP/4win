@@ -1,7 +1,7 @@
 # Interactive Player for the 4wins game
 # Author: Gabriel Kressin
 
-class InteractivePlayer:
+class Player:
     ''' A player to allow a human to play the 4wins game '''
 
     def __init__(self, game, pnumber, gui):
