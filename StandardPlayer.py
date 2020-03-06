@@ -128,5 +128,4 @@ class StandardPlayer:
         newPos = -1
         while not self.game.moveLegal(newPos):
             newPos = random.randint(0,6)
-        self._lastOwnPlacedCol = newPos
         return newPos
