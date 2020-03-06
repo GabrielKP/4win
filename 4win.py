@@ -43,7 +43,8 @@ class FourWins:
         self._player1 = self._playerInit(playerName1, 1)
         self._player2 = self._playerInit(playerName2, 2)
 
-        self._currentPlayer = random.randint(1,2)
+        # Player 1 always
+        self._currentPlayer = 1
 
         # Start Game
         self._gameLoop()
