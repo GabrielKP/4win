@@ -12,7 +12,6 @@ class StandardPlayer:
         self.name = "Standard Player"
         self.game = game
         self.pnumber = pnumber
-        self._lastOwnPlacedCol = -1
 
 
     def canWinAtPos(self, lrow, lcol, player):
@@ -31,7 +30,7 @@ class StandardPlayer:
         endCol = min(6, lcol + 3)
         ccol = max(0, lcol - 3)
         counter = 0
-        while ccol < endCol and counter < 4:
+        while ccol <= endCol and counter < 4:
             if self.game.getStone(lrow, ccol) == player or ccol == lcol:
                 counter += 1
             else:
@@ -120,12 +119,10 @@ class StandardPlayer:
         ''' Returns col in which the next stone should be placed '''
         winCol = self.tryWin()
         if winCol != -1:
-            self._lastOwnPlacedCol = winCol
             return winCol
 
         defCol = self.tryDef()
         if defCol != -1:
-            self._lastOwnPlacedCol = defCol
             return defCol
 
         newPos = -1
