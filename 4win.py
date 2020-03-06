@@ -132,6 +132,9 @@ class FourWins:
             return mod.ExamplePlayer(self, pnumber)
         # In Case of not finding a Player end execution
         else:
+                mod = importlib.import_module( playerName )
+                return mod.Player(self, pnumber)
+        except:
             self.fprint( "No such player as \"{}\", aborting".format(playerName), 0 )
             sys.exit(-1)
 
