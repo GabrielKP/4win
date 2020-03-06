@@ -298,7 +298,7 @@ class FourWins:
 
 
 def main():
-    FourWins(verbose=1, playerName1="Standard", playerName2="Interactive", gui=True)
+    FourWins(verbose=3, playerName1="StandardPlayer", playerName2="InteractivePlayer", gui=True)
 
 if __name__ == "__main__":
     main()
