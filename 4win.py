@@ -36,6 +36,7 @@ class FourWins:
 
         # Init GUI
         self.guiactive = gui
+        self._gui = None
         if gui:
             self._initGUI()
 
@@ -123,7 +124,7 @@ class FourWins:
         # Import and return an Interactive Player
         elif playerName == "Interactive":
             mod = importlib.import_module( "InteractivePlayer" )
-            return mod.InteractivePlayer(self, pnumber)
+            return mod.InteractivePlayer(self, pnumber, self._gui)
         # Import and return Example Player
         elif playerName == "ExampleName":
             # Copy this Code, paste it below this and adapt it to your player
@@ -303,7 +304,7 @@ class FourWins:
 
 
 def main():
-    FourWins(verbose=1, playerName1="Standard", playerName2="Interactive", gui=False)
+    FourWins(verbose=1, playerName1="Standard", playerName2="Interactive", gui=True)
 
 if __name__ == "__main__":
     main()
