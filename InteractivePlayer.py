@@ -1,7 +1,7 @@
 # Interactive Player for the 4wins game
 # Author: Gabriel Kressin
 
-class InteractivePlayer:
+class Player:
     ''' A player to allow a human to play the 4wins game '''
 
     def __init__(self, game, pnumber, gui):
@@ -10,8 +10,8 @@ class InteractivePlayer:
         self.name = "Interactive Player"
         self.game = game
         self.pnumber = pnumber
-        if gui != None:
-            self.gui = gui
+        self.gui = gui
+        if self.gui != None:
             self.gui._initInteractive()
 
 
@@ -24,10 +24,11 @@ class InteractivePlayer:
             # Get User Input
             if wrongInput:
                 print( "{} is not a valid Input! Please type an integer between 0 and 6 in a column which is not full!".format(newPos) )
-            # Console
-            # newPos = int(input( "Place a Stone! integer 0-6: " ))
-            # GUI
-            newPos = self.gui._getInput()
+            # Use GUI if it is on
+            if self.gui != None:
+                newPos = self.gui._getInput()
+            else:
+                newPos = int(input( "Place a Stone! integer 0-6: " ))
 
             wrongInput = True
 

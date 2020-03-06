@@ -118,20 +118,14 @@ class FourWins:
     def _playerInit(self, playerName, pnumber):
         ''' Initializes and imports Player Object, respective player file needs to be included above '''
         # Import and return Standard Player
-        if playerName == "Standard":
-            mod = importlib.import_module( "StandardPlayer" )
-            return mod.StandardPlayer(self, pnumber)
-        # Import and return an Interactive Player
-        elif playerName == "Interactive":
-            mod = importlib.import_module( "InteractivePlayer" )
-            return mod.InteractivePlayer(self, pnumber, self._gui)
-        # Import and return Example Player
-        elif playerName == "ExampleName":
-            # Copy this Code, paste it below this and adapt it to your player
-            mod = importlib.import_module( "ExamplePlayer" )
-            return mod.ExamplePlayer(self, pnumber)
-        # In Case of not finding a Player end execution
-        else:
+        try:
+            if playerName == "InteractivePlayer":
+                mod = importlib.import_module( playerName )
+                return mod.Player(self, pnumber, self._gui)
+            else:
+                mod = importlib.import_module( playerName )
+                return mod.Player(self, pnumber)
+        except:
             self.fprint( "No such player as \"{}\", aborting".format(playerName), 0 )
             sys.exit(-1)
 
