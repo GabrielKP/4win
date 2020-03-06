@@ -1,7 +1,7 @@
 # The professional Player for a 4wins game
 # Author: Janek Belka
 
-class JanekPlayer:
+class Player:
     ''' A 4wins player template '''
 
     def __init__(self, game, pnumber):
