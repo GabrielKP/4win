@@ -45,8 +45,8 @@ class StandardPlayer:
         ccol = max(0, lcol - 3)
         crow = lrow + lcol - ccol
         # Corner case when you are too far up
-        if crow >= self.game._nrows:
-            correction = crow - (self.game._nrows - 1)
+        if crow >= 7:
+            correction = crow - 6
             ccol += correction
             crow -= correction
         # Determine ending fields
@@ -73,8 +73,8 @@ class StandardPlayer:
             ccol -= crow
             crow = 0
         # Determine ending col / row for check
-        erow = min(self.game._nrows - 1, lrow + 3)
-        ecol = min(self.game._ncols - 1, lcol + 3)
+        erow = min(6, lrow + 3)
+        ecol = min(6, lcol + 3)
         # Count amount of stones in the diagonal
         counter = 0
         while ccol <= ecol and crow <= ecol and counter < 4:
@@ -94,7 +94,7 @@ class StandardPlayer:
         # Check every position stone can be placed in
         for col in range(0, self.game._ncols):
             row = self.game.getFullnessCol(col)
-            if row == self.game._nrows:
+            if row == 7:
                 continue
             if self.canWinAtPos(row, col, self.pnumber):
                 return col
@@ -108,7 +108,7 @@ class StandardPlayer:
         # Check every position enemy can place stone in
         for col in range(0, self.game._ncols):
             row = self.game.getFullnessCol(col)
-            if row == self.game._nrows:
+            if row == 7:
                 continue
             if self.canWinAtPos(row, col, enemy):
                 return col
