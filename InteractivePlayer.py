@@ -24,12 +24,12 @@ class Player:
         while not self.game.moveLegal(newPos):
             # Get User Input
             if wrongInput:
-                print( "{} is not a valid Input! Please type an integer between 0 and {} in a column which is not full!".format(newPos, self.ncols) )
+                print( "{} is not a valid Input! Please type an integer between 0 and {} in a column which is not full!".format(newPos, self.ncols - 1) )
             # Use GUI if it is on
             if self.gui != None:
                 newPos = self.gui._getInput()
             else:
-                newPos = int(input( "Place a Stone! integer 0-{}: ".format(self.ncols) ))
+                newPos = int(input( "Place a Stone! integer 0-{}: ".format(self.ncols - 1) ))
 
             wrongInput = True
 
