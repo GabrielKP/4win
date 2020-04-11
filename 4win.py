@@ -247,7 +247,7 @@ class FourWins:
         ecol = min(self._ncols - 1, lcol + 3)
         # Count amount of stones in the diagonal
         counter = 0
-        while ccol <= ecol and crow <= ecol and counter < 4:
+        while ccol <= ecol and crow <= erow and counter < 4:
             if self.getStone(crow, ccol) == self._currentPlayer:
                 counter += 1
             else:
