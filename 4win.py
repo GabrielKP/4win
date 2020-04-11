@@ -94,6 +94,16 @@ class FourWins:
         return self._lastStone
 
 
+    def getnrows(self):
+        ''' Returns number of rows '''
+        return self._nrows
+
+
+    def getncols(self):
+        ''' Returns number of columns '''
+        return self._ncols
+
+
     def _fullnessCreate(self, cols):
         ''' The fullness shows how many stones are in a column of the matrix '''
         return [0] * cols
