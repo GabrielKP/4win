@@ -3,7 +3,7 @@
 
 import random
 
-class StandardPlayer:
+class Player:
     ''' A basic 4wins player '''
 
     def __init__(self, game, pnumber):

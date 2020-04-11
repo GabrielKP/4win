@@ -1,7 +1,7 @@
 # The very Basic Player for a 4wins game
 # Author: Gabriel Kressin
 
-class ExamplePlayer:
+class Player:
     ''' A 4wins player template '''
 
     def __init__(self, game, pnumber):
