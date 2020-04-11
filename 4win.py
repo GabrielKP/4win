@@ -16,7 +16,7 @@ class FourWins:
                 playerName1="standard",             # Playername of first player
                 playerName2="standard",             # Playername of second player
                 ncols=7,                            # Number of columns
-                nrows=7,                            # Number of rows
+                nrows=6,                            # Number of rows
                 verbose=1,                          # How much output on the console should be given: 0=None, 1=Basic, 2=Extrem
                 gui=True                            # GUI
                 ):
