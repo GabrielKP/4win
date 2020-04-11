@@ -33,6 +33,7 @@ class FourWins:
         self._nrows = nrows
         self._matrix = self._matrixCreate( self._ncols, self._nrows )
         self._fullness = self._fullnessCreate( self._ncols )
+        self._maxTurns = (self._ncols * self._nrows)
 
         # Init GUI
         self.guiactive = gui
@@ -265,7 +266,7 @@ class FourWins:
     def _gameLoop(self):
         ''' Main Game Loop '''
         # Execute each turn in this loop
-        while( self._winner == 0 and self._turns < 49):
+        while( self._winner == 0 and self._turns < self._maxTurns):
             # 1. Increment Turn
             self._turns +=1
             self.fprint( "Game: -- Turn {:2} --".format(self._turns) )
@@ -294,7 +295,7 @@ class FourWins:
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
 
-        if self._turns == 49:
+        if self._turns == self._maxTurns:
             self._winner = 3
             drawMessage = "Game: Draw! Nobody looses or wins!"
             self.fprint( drawMessage )
