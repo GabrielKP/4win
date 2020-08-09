@@ -33,7 +33,6 @@ class FourWins:
         self._board = [0] * 2
         self._turns = 0
         self._height = [ self._H1 * i for i in range( self._WIDTH ) ]
-        print( self._height )
 
 
     def _makemove( self, column ):
@@ -43,7 +42,6 @@ class FourWins:
         self._board[self._turns & 1] ^= 1 << self._height[column]
         self._height[column] += 1
         self._moves.append( column )
-        self._turns += 1
 
 
     def _islegal( self, column ):
@@ -57,6 +55,28 @@ class FourWins:
         """
         Checks if current player has won
         """
+        cboard = self._board[self._turns & 1]
+
+        # Diagonal \
+        shifted = ( cboard >> self._HEIGHT ) & cboard
+        if( shifted & ( shifted >> self._HEIGHT * 2 ) != 0 ):
+            return True
+
+        # Diagonal /
+        shifted = ( cboard >> ( self._H1 + 1 ) ) & cboard
+        if( shifted & ( shifted >> ( self._H1 + 1 ) * 2 ) != 0 ):
+            return True
+
+        # Horizontal -
+        shifted = ( cboard >> self._H1 ) & cboard
+        if( shifted & ( shifted >> self._H1 * 2 ) != 0 ):
+            return True
+
+        # Vertical |
+        shifted = ( cboard >> 1 ) & cboard
+        if( shifted & ( shifted >> 2 ) != 0 ):
+            return True
+
         return False
 
 
@@ -64,6 +84,7 @@ class FourWins:
         """
         Function to terminate game
         """
+        self._printBoard()
         print( "Player {} has won!".format( player + 1 ) )
 
 
@@ -76,7 +97,6 @@ class FourWins:
         b1 = bin( self._board[1] )
         b1len = len(b1) - 2
         matrix = [ ["0"] * self._WIDTH for x in range( self._HEIGHT ) ]
-        print( b0 )
         for r in range( self._HEIGHT ):
             for c in range( self._WIDTH ):
                 pos = c * self._H1 + r
@@ -114,6 +134,7 @@ class FourWins:
             if self._haswon():
                 self._terminate( curr_player )
                 return
+            self._turns += 1
 
 
 def interactive( player, x, y, moves ):
