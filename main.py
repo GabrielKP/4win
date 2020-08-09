@@ -2,7 +2,7 @@
 # Implementation of a connect 4 game in python.
 # Inspired by John Tromp: https://tromp.github.io/c4/c4.html
 
-import sys
+import sys, random
 
 class FourWins:
     """
@@ -106,7 +106,7 @@ class FourWins:
                     matrix[r][c] = "2"
                 else:
                     matrix[r][c] = "0"
-
+        print( " Turn ", self._turns )
         print( '\n'.join( [ ' '.join( row ) for row in reversed( matrix ) ] ) )
 
 
@@ -137,12 +137,25 @@ class FourWins:
             self._turns += 1
 
 
-def interactive( player, x, y, moves ):
+def interactivePlayer( player, x, y, moves ):
     return int( input( "Player {}! Input a number between 0 and 6!".format( player + 1 ) ) )
 
 
+def randomPlayer( player, boards, height, moves ):
+    """
+    plays randomly unless enemy can win or heself can win
+    """
+    HEIGHT = 6
+    H1 = HEIGHT + 1
+    WIDTH = 7
+    while True:
+        newcol = random.randint( 0, WIDTH - 1 )
+        if( height[newcol] < ( newcol + 1 ) * H1 - 1 ):
+            return newcol
+
+
 def main():
-    FourWins( interactive, interactive, 1 )
+    FourWins( interactivePlayer, randomPlayer, 1 )
 
 
 if __name__ == "__main__":
