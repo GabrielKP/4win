@@ -52,6 +52,20 @@ class FourWins:
         return isinstance( column, int ) and column >= 0 and column < self._WIDTH and self._height[column] < ( column + 1 ) * self._H1 - 1
 
 
+    def _haswon( self ):
+        """
+        Checks if current player has won
+        """
+        return False
+
+
+    def _terminate( self, player ):
+        """
+        Function to terminate game
+        """
+        print( "Player {} has won!".format( player + 1 ) )
+
+
     def _gameLoop( self ):
         """
         Main loop for game:
@@ -61,19 +75,17 @@ class FourWins:
         """
         while self._turns < self._SIZE:
             # 1
-            newcol = self._players[self._turns & 1]( self._board, self._height, self._moves )
+            curr_player = self._turns & 1
+            newcol = self._players[curr_player]( curr_player, self._board, self._height, self._moves )
             # 2
             if not self._islegal( newcol ):
-                self._haswon( self._turns + 1 & 1 )
-                break
+                self._terminate( self._turns + 1 & 1 )
+                return
             self._makemove( newcol )
             # 3
-
-
-    def _haswon( self, player ):
-        """
-        Function to terminate game
-        """
+            if self._haswon():
+                self._terminate( curr_player )
+                return
 
 
 
