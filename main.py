@@ -23,6 +23,7 @@ class FourWins:
         self._SIZE = self._HEIGHT * self._WIDTH
         self._moves = [] * self._SIZE
         self._reset()
+        self._gameLoop()
 
 
     def _reset( self ):
@@ -66,14 +67,42 @@ class FourWins:
         print( "Player {} has won!".format( player + 1 ) )
 
 
+    def _printBoard( self ):
+        """
+        Prints board
+        """
+        b0 = bin( self._board[0] )
+        b0len = len(b0) - 2
+        b1 = bin( self._board[1] )
+        b1len = len(b1) - 2
+        matrix = [ ["0"] * self._WIDTH for x in range( self._HEIGHT ) ]
+        for r in range( self._HEIGHT ):
+            for c in range( self._WIDTH ):
+                pos = r * self._H1 + c
+                if b0len > pos and b0[-pos] == '1':
+                    matrix[r][c] = "1"
+                elif b1len > pos and b1[-pos] == '1':
+                    matrix[r][c] = "2"
+                else:
+                    matrix[r][c] = "0"
+
+            if b0len <= pos and b1len <= pos:
+                break
+        print( '\n'.join( [ ' '.join( row ) for row in matrix ] ) )
+
+
     def _gameLoop( self ):
         """
         Main loop for game:
+        0. Print or draw
         1. Get column from player
         2. Place stone
         3. Check for winner
         """
         while self._turns < self._SIZE:
+            # 0
+            if self._verbose > 0:
+                self._printBoard()
             # 1
             curr_player = self._turns & 1
             newcol = self._players[curr_player]( curr_player, self._board, self._height, self._moves )
@@ -86,7 +115,6 @@ class FourWins:
             if self._haswon():
                 self._terminate( curr_player )
                 return
-
 
 
 def main():
