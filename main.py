@@ -21,7 +21,7 @@ class FourWins:
         self._WIDTH = 7
         self._H1 = self._HEIGHT + 1
         self._SIZE = self._HEIGHT * self._WIDTH
-        self._moves = [] * self._SIZE
+        self._moves = []
         self._reset()
         self._gameLoop()
 
@@ -40,9 +40,9 @@ class FourWins:
         """
         Places a stone in column
         """
-        self._board[self._turns & 1] = 1 << self._height[column]
+        self._board[self._turns & 1] ^= 1 << self._height[column]
         self._height[column] += 1
-        self._moves[self._turns] = column
+        self._moves.append( column )
         self._turns += 1
 
 
@@ -76,19 +76,18 @@ class FourWins:
         b1 = bin( self._board[1] )
         b1len = len(b1) - 2
         matrix = [ ["0"] * self._WIDTH for x in range( self._HEIGHT ) ]
+        print( b0 )
         for r in range( self._HEIGHT ):
             for c in range( self._WIDTH ):
-                pos = r * self._H1 + c
-                if b0len > pos and b0[-pos] == '1':
+                pos = c * self._H1 + r
+                if b0len > pos and b0[-pos - 1] == '1':
                     matrix[r][c] = "1"
-                elif b1len > pos and b1[-pos] == '1':
+                elif b1len > pos and b1[-pos - 1] == '1':
                     matrix[r][c] = "2"
                 else:
                     matrix[r][c] = "0"
 
-            if b0len <= pos and b1len <= pos:
-                break
-        print( '\n'.join( [ ' '.join( row ) for row in matrix ] ) )
+        print( '\n'.join( [ ' '.join( row ) for row in reversed( matrix ) ] ) )
 
 
     def _gameLoop( self ):
@@ -117,8 +116,12 @@ class FourWins:
                 return
 
 
+def interactive( player, x, y, moves ):
+    return int( input( "Player {}! Input a number between 0 and 6!".format( player + 1 ) ) )
+
+
 def main():
-    FourWins( None, None, 1 )
+    FourWins( interactive, interactive, 1 )
 
 
 if __name__ == "__main__":
