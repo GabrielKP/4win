@@ -21,8 +21,8 @@ class FourWins:
         self._HEIGHT = 6
         self._WIDTH = 7
         self._H1 = self._HEIGHT + 1
-        self._moves = [] * self._SIZE
         self._SIZE = self._HEIGHT * self._WIDTH
+        self._moves = [] * self._SIZE
         self._reset()
 
 
@@ -32,24 +32,29 @@ class FourWins:
         """
         self._board = [0] * 2
         self._turns = 0
-        self._height = [ self._H1 * i for i in range( self._HEIGHT ) ]
+        self._height = [ self._H1 * i for i in range( self._WIDTH ) ]
+        print( self._height )
 
 
     def _makemove( self, column ):
         """
         Places a stone in column
         """
-        if self.islegal( column ):
-            self._board[self._turns & 1] = self._height[column]
+        self._board[self._turns & 1] = 1 << self._height[column]
+        self._height[column] += 1
+        self._moves[self._turns] = column
+        self._turns += 1
 
 
     def islegal( self, column ):
         """
         Checks if stone placement is legal
         """
+        pass
+
 
 def main():
-    print( "Hello World!" )
+    FourWins( None, None, 1 )
 
 
 if __name__ == "__main__":
