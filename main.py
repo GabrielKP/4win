@@ -50,7 +50,7 @@ class FourWins:
         """
         Checks if stone placement is legal
         """
-        pass
+        return isinstance( column, int ) and column >= 0 and column < self._WIDTH and self._height[column] < ( column + 1 ) * self._H1 - 1
 
 
 def main():
