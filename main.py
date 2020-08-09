@@ -15,8 +15,7 @@ class FourWins:
         p1/p2 are functions which get the board, the height and last history
         """
 
-        self._p1 = p1
-        self._p2 = p2
+        self._players = [p1, p2]
         self._verbose = verbose
         self._HEIGHT = 6
         self._WIDTH = 7
@@ -46,11 +45,36 @@ class FourWins:
         self._turns += 1
 
 
-    def islegal( self, column ):
+    def _islegal( self, column ):
         """
         Checks if stone placement is legal
         """
         return isinstance( column, int ) and column >= 0 and column < self._WIDTH and self._height[column] < ( column + 1 ) * self._H1 - 1
+
+
+    def _gameLoop( self ):
+        """
+        Main loop for game:
+        1. Get column from player
+        2. Place stone
+        3. Check for winner
+        """
+        while self._turns < self._SIZE:
+            # 1
+            newcol = self._players[self._turns & 1]( self._board, self._height, self._moves )
+            # 2
+            if not self._islegal( newcol ):
+                self._haswon( self._turns + 1 & 1 )
+                break
+            self._makemove( newcol )
+            # 3
+
+
+    def _haswon( self, player ):
+        """
+        Function to terminate game
+        """
+
 
 
 def main():
