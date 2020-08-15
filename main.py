@@ -14,6 +14,8 @@ class FourWins:
         """
         Initialize the board, set the variables
         p1/p2 are functions which get the board, the height and last history
+        p1/p2 have following signature:
+        nextMove( curr_player, boards, height, moves ) -> int[0,WIDTH]
         """
 
         self._players = [p1, p2]
@@ -31,7 +33,7 @@ class FourWins:
         """
         Resets Gameboard
         """
-        self._board = [0] * 2
+        self._boards = [0] * 2
         self._turns = 0
         self._height = [ self._H1 * i for i in range( self._WIDTH ) ]
 
@@ -40,7 +42,7 @@ class FourWins:
         """
         Places a stone in column
         """
-        self._board[self._turns & 1] ^= 1 << self._height[column]
+        self._boards[self._turns & 1] ^= 1 << self._height[column]
         self._height[column] += 1
         self._moves.append( column )
 
@@ -56,7 +58,7 @@ class FourWins:
         """
         Checks if current player has won
         """
-        cboard = self._board[self._turns & 1]
+        cboard = self._boards[self._turns & 1]
 
         # Diagonal \
         shifted = ( cboard >> self._HEIGHT ) & cboard
@@ -93,9 +95,9 @@ class FourWins:
         """
         Prints board
         """
-        b0 = bin( self._board[0] )
+        b0 = bin( self._boards[0] )
         b0len = len(b0) - 2
-        b1 = bin( self._board[1] )
+        b1 = bin( self._boards[1] )
         b1len = len(b1) - 2
         matrix = [ ["0"] * self._WIDTH for x in range( self._HEIGHT ) ]
         for r in range( self._HEIGHT ):
@@ -125,7 +127,7 @@ class FourWins:
                 self._printBoard()
             # 1
             curr_player = self._turns & 1
-            newcol = self._players[curr_player]( curr_player, self._board, self._height, self._moves )
+            newcol = self._players[curr_player]( curr_player, self._boards, self._height, self._moves )
             # 2
             if not self._islegal( newcol ):
                 self._terminate( self._turns + 1 & 1 )
