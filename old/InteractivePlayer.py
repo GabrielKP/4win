@@ -11,6 +11,7 @@ class Player:
         self.game = game
         self.pnumber = pnumber
         self.gui = gui
+        self.ncols = self.game.getncols()
         if self.gui != None:
             self.gui._initInteractive()
 
@@ -23,12 +24,12 @@ class Player:
         while not self.game.moveLegal(newPos):
             # Get User Input
             if wrongInput:
-                print( "{} is not a valid Input! Please type an integer between 0 and 6 in a column which is not full!".format(newPos) )
+                print( "{} is not a valid Input! Please type an integer between 0 and {} in a column which is not full!".format(newPos, self.ncols - 1) )
             # Use GUI if it is on
             if self.gui != None:
                 newPos = self.gui._getInput()
             else:
-                newPos = int(input( "Place a Stone! integer 0-6: " ))
+                newPos = int(input( "Place a Stone! integer 0-{}: ".format(self.ncols - 1) ))
 
             wrongInput = True
 

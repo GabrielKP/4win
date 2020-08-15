@@ -16,7 +16,7 @@ class FourWins:
                 playerName1="standard",             # Playername of first player
                 playerName2="standard",             # Playername of second player
                 ncols=7,                            # Number of columns
-                nrows=7,                            # Number of rows
+                nrows=6,                            # Number of rows
                 verbose=1,                          # How much output on the console should be given: 0=None, 1=Basic, 2=Extrem
                 gui=True                            # GUI
                 ):
@@ -33,6 +33,7 @@ class FourWins:
         self._nrows = nrows
         self._matrix = self._matrixCreate( self._ncols, self._nrows )
         self._fullness = self._fullnessCreate( self._ncols )
+        self._maxTurns = (self._ncols * self._nrows)
 
         # Init GUI
         self.guiactive = gui
@@ -73,6 +74,21 @@ class FourWins:
         return self._lastStone
 
 
+    def getnrows(self):
+        ''' Returns number of rows '''
+        return self._nrows
+
+
+    def getncols(self):
+        ''' Returns number of columns '''
+        return self._ncols
+
+
+    def _fullnessCreate(self, cols):
+        ''' The fullness shows how many stones are in a column of the matrix '''
+        return [0] * cols
+
+
     def getFullness(self):
         ''' Returns a copy of the fullness '''
         return copy.copy( self._fullness )
@@ -90,7 +106,7 @@ class FourWins:
 
     def moveLegal(self, pos):
         ''' Check if pos is an allowed column to place a stone in '''
-        return isinstance(pos, int) and 0 <= pos and pos <= 6 and self._fullness[pos] <= 6
+        return isinstance(pos, int) and 0 <= pos and pos < self._ncols and self._fullness[pos] <= 6
 
 
     def _initGUI(self):
@@ -231,7 +247,7 @@ class FourWins:
         ecol = min(self._ncols - 1, lcol + 3)
         # Count amount of stones in the diagonal
         counter = 0
-        while ccol <= ecol and crow <= ecol and counter < 4:
+        while ccol <= ecol and crow <= erow and counter < 4:
             if self.getStone(crow, ccol) == self._currentPlayer:
                 counter += 1
             else:
@@ -251,7 +267,7 @@ class FourWins:
     def _gameLoop(self):
         ''' Main Game Loop '''
         # Execute each turn in this loop
-        while( self._winner == 0 and self._turns < 49):
+        while( self._winner == 0 and self._turns < self._maxTurns):
             # 1. Increment Turn
             self._turns +=1
             self.fprint( "Game: -- Turn {:2} --".format(self._turns) )
@@ -280,7 +296,7 @@ class FourWins:
             # Change Player
             self._currentPlayer = self._flipPlayer( self._currentPlayer )
 
-        if self._turns == 49:
+        if self._turns == self._maxTurns:
             self._winner = 3
             drawMessage = "Game: Draw! Nobody looses or wins!"
             self.fprint( drawMessage )
