@@ -33,8 +33,18 @@ class gabrielPlayer:
         self._shifts.append( self._H1 + 1 ) # Diagonal /
         self._shifts.append( self._H1 )     # Horizontal -
         self._shifts.append( 1 )            # Vertikal |
+        self._maxHeight = [ 6,13,20,27,34,41,48 ]
 
-    def canWin( self, board ):
+        # 6 13 20 27 34 41 48 55
+        # 5 12 19 26 33 40 47 54
+        # 4 11 18 25 32 39 46 53
+        # 3 10 17 24 31 38 45 52
+        # 2  9 16 23 30 37 44 51
+        # 1  8 15 22 29 36 43 50
+        # 0  7 14 21 28 35 42 49
+
+
+    def _canWin( self, board ):
         """
         Checks if given board has 4 in the row
         """
@@ -45,11 +55,27 @@ class gabrielPlayer:
         return False
 
 
+    def _checkPositions( self, board, height ):
+        """
+        Checks every position
+        """
+        for col in range( self._WIDTH ):
+            if height[col] != self._maxHeight:
+                newboard = board ^ ( 1 << height[col] )
+                if self._canWin( newboard ):
+                    return col
+        return -1
+
+
     def nextMove( self, pnum, boards, height, moves ):
         """
         determines the next move
         """
+        myboard = boards[pnum]
         # 1. Check if winnable
+        res = self._checkPositions( myboard, height )
+        if res != -1:
+            return res
         # 2. Check if enemy can win somewhere
 
         return 0
