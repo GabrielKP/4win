@@ -19,7 +19,20 @@ def randomPlayer( player, boards, height, moves ):
             return newcol
 
 
-class gabrielPlayer:
+class GabrielPlayer:
+
+
+    class GameState:
+        """
+        Gamestate represents a specific state of the game with
+        both boards, the height and the amount of turns
+        """
+
+        def __init__( self, myboard, enemyboard, height, turns ):
+            self._myboard = myboard
+            self._enemyboard = enemyboard
+            self._height = height
+            self._turns = turns
 
 
     def __init__( self, verbose = 0 ):
@@ -67,15 +80,23 @@ class gabrielPlayer:
         return -1
 
 
-    def nextMove( self, pnum, boards, height, moves ):
+    def nextMove( self, turns, boards, height, moves ):
         """
         determines the next move
         """
-        myboard = boards[pnum]
+        currplayer = turns & 1
+        myboard = boards[currplayer]
+        enemyboard = boards[( currplayer + 1) % 2]
         # 1. Check if winnable
         res = self._checkPositions( myboard, height )
         if res != -1:
             return res
         # 2. Check if enemy can win somewhere
+        res = self._checkPositions( enemyboard, height )
+        if res != -1:
+            return res
+
+        # Create current game as Node:
+        root = self.GameState( myboard, enemyboard, height, turns )
 
         return 0
