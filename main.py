@@ -15,7 +15,7 @@ class FourWins:
         Initialize the board, set the variables
         p1/p2 are functions which get the board, the height and last history
         p1/p2 have following signature:
-        nextMove( curr_player, boards, height, moves ) -> int[0,WIDTH]
+        nextMove( turns, boards, height, moves ) -> int[0,WIDTH]
         """
 
         self._players = [p1, p2]
@@ -127,7 +127,7 @@ class FourWins:
                 self._printBoard()
             # 1
             curr_player = self._turns & 1
-            newcol = self._players[curr_player]( curr_player, self._boards, self._height, self._moves )
+            newcol = self._players[curr_player]( self._turns, self._boards, self._height, self._moves )
             # 2
             if not self._islegal( newcol ):
                 self._terminate( self._turns + 1 & 1 )

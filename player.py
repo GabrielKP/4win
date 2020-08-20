@@ -2,11 +2,11 @@
 
 import random
 
-def interactivePlayer( player, x, y, moves ):
-    return int( input( "Player {}! Input a number between 0 and 6!".format( player + 1 ) ) )
+def interactivePlayer( turns, x, y, moves ):
+    return int( input( "Player {}! Input a number between 0 and 6!".format( ( turns & 1 ) + 1 ) ) )
 
 
-def randomPlayer( player, boards, height, moves ):
+def randomPlayer( turns, boards, height, moves ):
     """
     plays randomly unless enemy can win or heself can win
     """
