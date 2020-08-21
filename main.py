@@ -141,7 +141,8 @@ class FourWins:
 
 
 def main():
-    FourWins( interactivePlayer, randomPlayer, 1 )
+    gbp = GabrielPlayer()
+    FourWins( interactivePlayer, gbp.nextMove, 1 )
 
 
 if __name__ == "__main__":

@@ -1,6 +1,8 @@
 # Player functions for 4wins
 
 import random
+import copy
+import sys
 
 def interactivePlayer( turns, x, y, moves ):
     return int( input( "Player {}! Input a number between 0 and 6!".format( ( turns & 1 ) + 1 ) ) )
@@ -28,11 +30,15 @@ class GabrielPlayer:
         both boards, the height and the amount of turns
         """
 
-        def __init__( self, myboard, enemyboard, height, turns ):
-            self._myboard = myboard
-            self._enemyboard = enemyboard
-            self._height = height
-            self._turns = turns
+        def __init__( self, boards, height, turns ):
+            self.boards = boards
+            self.height = height
+            self.turns = turns
+            self.substates = []
+
+
+        def addSubState( self, substate ):
+            self.substates.append( substate )
 
 
     def __init__( self, verbose = 0 ):
@@ -80,13 +86,51 @@ class GabrielPlayer:
         return -1
 
 
+    def _backtrack( self, gamestate, stepsLeft ):
+        """
+        Go stepsLeft deep into the tree of possible gamestates
+        and compute scores for them
+        """
+        currentp = gamestate.turns & 1
+        # enemyp = ( currentp + 1 ) % 2
+        # 1. Check for win
+        if self._canWin( gamestate.boards[0] ):
+            return [10 * stepsLeft, 0]
+
+        # 2. Check for enemy win
+        if self._canWin( gamestate.boards[1] ):
+            return [0, 10 * stepsLeft]
+
+        # 3. Recursion Anker
+        if stepsLeft == 0:
+            return [0, 0]
+
+        # 4. Substates
+        for col in range( 0, self._WIDTH ):
+            if gamestate.height[col] != self._maxHeight:
+                newboards = copy.copy( gamestate.boards )
+                newboards[currentp] = gamestate.boards[currentp] ^ ( 1 << gamestate.height[col] )
+                newheight = copy.copy( gamestate.height )
+                newheight[col] += 1
+                gamestate.addSubState( self.GameState( newboards, newheight, gamestate.turns + 1 ) )
+
+        # 5. Compute Score
+        ret = [0, 0]
+        for substate in gamestate.substates:
+            p1, p2 = self._backtrack( substate, stepsLeft - 1 )
+            ret[0] += p1
+            ret[1] += p2
+
+        return ret
+
+
     def nextMove( self, turns, boards, height, moves ):
         """
         determines the next move
         """
-        currplayer = turns & 1
-        myboard = boards[currplayer]
-        enemyboard = boards[( currplayer + 1) % 2]
+        currentp = turns & 1
+        myboard = boards[currentp]
+        enemyboard = boards[( currentp + 1) % 2]
         # 1. Check if winnable
         res = self._checkPositions( myboard, height )
         if res != -1:
@@ -97,6 +141,14 @@ class GabrielPlayer:
             return res
 
         # Create current game as Node:
-        root = self.GameState( myboard, enemyboard, height, turns )
+        root = self.GameState( boards, height, turns )
+
+        for col in range( 0, self._WIDTH ):
+            if root.height[col] != self._maxHeight:
+                newboards = copy.copy( root.boards )
+                newboards[currentp] = root.boards[currentp] ^ ( 1 << root.height[col] )
+                newheight = copy.copy( root.height )
+                newheight[col] += 1
+                print( "Col {}: {}".format( col, self._backtrack( self.GameState( newboards, newheight, root.turns + 1 ), 7 ) ) )
 
         return 0
