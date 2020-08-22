@@ -30,19 +30,16 @@ class GabrielPlayer:
         both boards, the height and the amount of turns
         """
 
-        def __init__( self, boards, height, turns ):
+        def __init__( self, boards, height, turns, bc ):
             self.boards = boards
             self.height = height
             self.turns = turns
-            # self.substates = []
+            self.bc = bc
 
 
-        # def addSubState( self, substate ):
-        #     self.substates.append( substate )
-
-
-    def __init__( self, verbose = 0 ):
+    def __init__( self, steps = 11, verbose = 0 ):
         self._verbose = verbose
+        self._STEPS = steps
         self._HEIGHT = 6
         self._WIDTH = 7
         self._H1 = self._HEIGHT + 1
@@ -119,10 +116,7 @@ class GabrielPlayer:
         Go stepsLeft deep into the tree of possible gamestates
         and compute scores for them
         """
-        bc = self._boardcode( gamestate.boards, gamestate.turns )
-        if bc in self._statedic:                # 0. Check if state is in dic already
-            return self._statedic[bc]
-
+        bc = gamestate.bc
         currentp = gamestate.turns & 1
 
         if self._canWin( gamestate.boards[0] ): # 1. Check for win player 0
@@ -146,8 +140,13 @@ class GabrielPlayer:
                 newboards[currentp] = gamestate.boards[currentp] ^ ( 1 << gamestate.height[col] )
                 newheight = gamestate.height[:]
                 newheight[col] += 1
-                newstate = self.GameState( newboards, newheight, gamestate.turns + 1 )
-                p1, p2 = self._backtrack( newstate, stepsLeft - 1 )
+                # No state creation needed if it is in dic already
+                newbc = newboards[(gamestate.turns + 1) & 1] + newboards[0] + newboards[1]
+                if newbc in self._statedic:
+                    p1, p2 = self._statedic[newbc]
+                else:
+                    newstate = self.GameState( newboards, newheight, gamestate.turns + 1, newbc )
+                    p1, p2 = self._backtrack( newstate, stepsLeft - 1 )
                 ret[0] += p1
                 ret[1] += p2
 
@@ -172,7 +171,7 @@ class GabrielPlayer:
             return res
 
         # Create current game as Node:
-        root = self.GameState( boards, height, turns )
+        root = self.GameState( boards, height, turns, self._boardcode( boards, turns ) )
 
         self._statedic = {}
         for col in range( 0, self._WIDTH ):
@@ -181,6 +180,12 @@ class GabrielPlayer:
                 newboards[currentp] = root.boards[currentp] ^ ( 1 << root.height[col] )
                 newheight = root.height[:]
                 newheight[col] += 1
-                print( "Col {}: {}".format( col, self._backtrack( self.GameState( newboards, newheight, root.turns + 1 ), 11 ) ) )
+                newbc = newboards[(root.turns + 1) & 1] + newboards[0] + newboards[1]
+                if newbc in self._statedic:
+                    ret = self._statedic[newbc]
+                else:
+                    newstate = self.GameState( newboards, newheight, root.turns + 1, newbc )
+                    ret = self._backtrack( newstate, self._STEPS )
+                print( "Col {}: {}".format( col, ret ) )
 
         return 0
