@@ -37,7 +37,7 @@ class GabrielPlayer:
             self.bc = bc
 
 
-    def __init__( self, steps = 11, verbose = 0 ):
+    def __init__( self, steps = 9, verbose = 0 ):
         self._verbose = verbose
         self._STEPS = steps
         self._HEIGHT = 6
@@ -116,16 +116,17 @@ class GabrielPlayer:
         Go stepsLeft deep into the tree of possible gamestates
         and compute scores for them
         """
+        modifier = (stepsLeft + 1) ** 2
         bc = gamestate.bc
         currentp = gamestate.turns & 1
 
         if self._canWin( gamestate.boards[0] ): # 1. Check for win player 0
-            ret = [10 * stepsLeft, 0]
+            ret = [modifier, 0]
             self._statedic[bc] = ret
             return ret
 
         if self._canWin( gamestate.boards[1] ): # 2. Check for win player 1
-            ret = [0, 10 * stepsLeft]
+            ret = [0, modifier]
             self._statedic[bc] = ret
             return ret
 
@@ -164,16 +165,19 @@ class GabrielPlayer:
         # 1. Check if winnable
         res = self._checkPositions( boards[currentp], height )
         if res != -1:
+            print( "Placing in column {}".format( res ) )
             return res
         # 2. Check if enemy can win somewhere
         res = self._checkPositions( boards[enemyp], height )
         if res != -1:
+            print( "Placing in column {}".format( res ) )
             return res
 
         # Create current game as Node:
         root = self.GameState( boards, height, turns, self._boardcode( boards, turns ) )
 
         self._statedic = {}
+        result = []
         for col in range( 0, self._WIDTH ):
             if root.height[col] < self._maxHeight[col]:
                 newboards = root.boards[:]
@@ -186,6 +190,11 @@ class GabrielPlayer:
                 else:
                     newstate = self.GameState( newboards, newheight, root.turns + 1, newbc )
                     ret = self._backtrack( newstate, self._STEPS )
-                print( "Col {}: {}".format( col, ret ) )
+                score = currentp * ( ret[1] - ret[0] )  + ( not currentp ) * ( ret[1] - ret[0])
+                result.append( ( score, col ) )
+                print( "Column {}: {}, score {}".format( col, ret, score ) )
 
-        return 0
+        newcol = max( result )[1]
+        print( "Placing in column {}".format( newcol ) )
+
+        return newcol
