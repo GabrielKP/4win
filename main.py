@@ -3,6 +3,8 @@
 # Inspired by John Tromp: https://tromp.github.io/c4/c4.html
 
 import sys
+import time
+import timeit
 from player import *
 
 class FourWins:
@@ -127,7 +129,11 @@ class FourWins:
                 self._printBoard()
             # 1
             curr_player = self._turns & 1
+            start, startP = timeit.default_timer(), time.process_time()
             newcol = self._players[curr_player]( self._turns, self._boards, self._height, self._moves )
+            end, endP = timeit.default_timer(), time.process_time()
+            print( "Defaulttime: {}".format( end - start ) )
+            print( "Processtime: {}".format( endP - startP ) )
             # 2
             if not self._islegal( newcol ):
                 self._terminate( self._turns + 1 & 1 )
