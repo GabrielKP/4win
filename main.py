@@ -28,7 +28,13 @@ class FourWins:
         self._SIZE = self._HEIGHT * self._WIDTH
         self._moves = []
         self._reset()
-        self._gameLoop()
+
+
+    def start( self ):
+        """
+        Starts the game
+        """
+        return self._gameLoop()
 
 
     def _reset( self ):
@@ -142,13 +148,17 @@ class FourWins:
             # 3
             if self._haswon():
                 self._terminate( curr_player )
-                return
+                return curr_player
             self._turns += 1
 
 
 def main():
     gbp = GabrielPlayer()
-    FourWins( interactivePlayer, gbp.nextMove, 1 )
+    winners = [ 0,0 ]
+    for _ in range( 100 ):
+        win = FourWins( randomPlayer, gbp.nextMove, 1 ).start()
+        winners[win] += 1
+    print( winners )
 
 
 if __name__ == "__main__":
