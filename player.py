@@ -34,11 +34,11 @@ class GabrielPlayer:
             self.boards = boards
             self.height = height
             self.turns = turns
-            self.substates = []
+            # self.substates = []
 
 
-        def addSubState( self, substate ):
-            self.substates.append( substate )
+        # def addSubState( self, substate ):
+        #     self.substates.append( substate )
 
 
     def __init__( self, verbose = 0 ):
@@ -52,7 +52,7 @@ class GabrielPlayer:
         self._shifts.append( self._H1 + 1 ) # Diagonal /
         self._shifts.append( self._H1 )     # Horizontal -
         self._shifts.append( 1 )            # Vertikal |
-        self._maxHeight = [ 6,13,20,27,34,41,48 ]
+        self._maxHeight = [ 5,12,19,26,33,40,47 ]
 
         # 6 13 20 27 34 41 48 55
         # 5 12 19 26 33 40 47 54
@@ -79,11 +79,39 @@ class GabrielPlayer:
         Checks every position
         """
         for col in range( self._WIDTH ):
-            if height[col] != self._maxHeight:
+            if height[col] < self._maxHeight[col]:
                 newboard = board ^ ( 1 << height[col] )
                 if self._canWin( newboard ):
                     return col
         return -1
+
+
+    def _printBoard( self, boards ):
+        """
+        Prints board
+        """
+        b0 = bin( boards[0] )
+        b0len = len(b0) - 2
+        b1 = bin( boards[1] )
+        b1len = len(b1) - 2
+        matrix = [ ["0"] * self._WIDTH for x in range( self._HEIGHT ) ]
+        for r in range( self._HEIGHT ):
+            for c in range( self._WIDTH ):
+                pos = c * self._H1 + r
+                if b0len > pos and b0[-pos - 1] == '1':
+                    matrix[r][c] = "1"
+                elif b1len > pos and b1[-pos - 1] == '1':
+                    matrix[r][c] = "2"
+                else:
+                    matrix[r][c] = "0"
+        print( '\n'.join( [ ' '.join( row ) for row in reversed( matrix ) ] ) )
+
+
+    def _boardcode( self, boards, turns ):
+        """
+        Returns unique code for each board
+        """
+        return boards[turns & 1] + boards[0] + boards[1]
 
 
     def _backtrack( self, gamestate, stepsLeft ):
@@ -91,36 +119,39 @@ class GabrielPlayer:
         Go stepsLeft deep into the tree of possible gamestates
         and compute scores for them
         """
+        bc = self._boardcode( gamestate.boards, gamestate.turns )
+        if bc in self._statedic:                # 0. Check if state is in dic already
+            return self._statedic[bc]
+
         currentp = gamestate.turns & 1
-        # enemyp = ( currentp + 1 ) % 2
-        # 1. Check for win
-        if self._canWin( gamestate.boards[0] ):
-            return [10 * stepsLeft, 0]
 
-        # 2. Check for enemy win
-        if self._canWin( gamestate.boards[1] ):
-            return [0, 10 * stepsLeft]
+        if self._canWin( gamestate.boards[0] ): # 1. Check for win player 0
+            ret = [10 * stepsLeft, 0]
+            self._statedic[bc] = ret
+            return ret
 
-        # 3. Recursion Anker
-        if stepsLeft == 0:
+        if self._canWin( gamestate.boards[1] ): # 2. Check for win player 1
+            ret = [0, 10 * stepsLeft]
+            self._statedic[bc] = ret
+            return ret
+
+        if stepsLeft == 0:                      # 3. Recursion Anker
+            self._statedic[bc] = [0, 0]
             return [0, 0]
 
-        # 4. Substates
+        ret = [0, 0]                            # 4. Substates
         for col in range( 0, self._WIDTH ):
-            if gamestate.height[col] != self._maxHeight:
-                newboards = copy.copy( gamestate.boards )
+            if gamestate.height[col] < self._maxHeight[col]:
+                newboards = gamestate.boards[:]
                 newboards[currentp] = gamestate.boards[currentp] ^ ( 1 << gamestate.height[col] )
-                newheight = copy.copy( gamestate.height )
+                newheight = gamestate.height[:]
                 newheight[col] += 1
-                gamestate.addSubState( self.GameState( newboards, newheight, gamestate.turns + 1 ) )
+                newstate = self.GameState( newboards, newheight, gamestate.turns + 1 )
+                p1, p2 = self._backtrack( newstate, stepsLeft - 1 )
+                ret[0] += p1
+                ret[1] += p2
 
-        # 5. Compute Score
-        ret = [0, 0]
-        for substate in gamestate.substates:
-            p1, p2 = self._backtrack( substate, stepsLeft - 1 )
-            ret[0] += p1
-            ret[1] += p2
-
+        self._statedic[bc] = ret
         return ret
 
 
@@ -129,26 +160,27 @@ class GabrielPlayer:
         determines the next move
         """
         currentp = turns & 1
-        myboard = boards[currentp]
-        enemyboard = boards[( currentp + 1) % 2]
+        enemyp = ( currentp + 1) % 2
+
         # 1. Check if winnable
-        res = self._checkPositions( myboard, height )
+        res = self._checkPositions( boards[currentp], height )
         if res != -1:
             return res
         # 2. Check if enemy can win somewhere
-        res = self._checkPositions( enemyboard, height )
+        res = self._checkPositions( boards[enemyp], height )
         if res != -1:
             return res
 
         # Create current game as Node:
         root = self.GameState( boards, height, turns )
 
+        self._statedic = {}
         for col in range( 0, self._WIDTH ):
-            if root.height[col] != self._maxHeight:
-                newboards = copy.copy( root.boards )
+            if root.height[col] < self._maxHeight[col]:
+                newboards = root.boards[:]
                 newboards[currentp] = root.boards[currentp] ^ ( 1 << root.height[col] )
-                newheight = copy.copy( root.height )
+                newheight = root.height[:]
                 newheight[col] += 1
-                print( "Col {}: {}".format( col, self._backtrack( self.GameState( newboards, newheight, root.turns + 1 ), 7 ) ) )
+                print( "Col {}: {}".format( col, self._backtrack( self.GameState( newboards, newheight, root.turns + 1 ), 11 ) ) )
 
         return 0
