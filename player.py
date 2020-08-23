@@ -1,4 +1,10 @@
 # Player functions for 4wins
+# @TODO
+# matrix conversion
+# GUI
+# multi core player
+# bugfix player (bad defense)
+# Get rid of GameState
 
 import random
 import copy
