@@ -1,6 +1,5 @@
 # Player functions for 4wins
 # @TODO
-# matrix conversion
 # GUI
 # multi core player
 # bugfix player (bad defense)
@@ -10,17 +9,67 @@ import random
 import copy
 import sys
 
+WIDTH = 7
+HEIGHT = 6
+
+
+def boards2matrix( boards ):
+    """
+    Returns a matrix given boards
+    """
+    H1 = HEIGHT + 1
+    b0 = bin( boards[0] )
+    b0len = len( b0 )
+    b1 = bin( boards[1] )
+    b1len = len( b1 )
+    matrix = [ ["0"] * WIDTH for x in range( HEIGHT ) ]
+    for r in range( HEIGHT ):
+        for c in range( WIDTH ):
+            pos = c * H1 + r
+            if b0len > pos and b0[-pos - 1] == '1':
+                matrix[r][c] = "1"
+            elif b1len > pos and b1[-pos - 1] == '1':
+                matrix[r][c] = "2"
+            else:
+                matrix[r][c] = "0"
+
+    return matrix
+
+
+def printBoards( boards ):
+        """
+        Prints the game in console given "boards"
+        """
+        H1 = HEIGHT + 1
+        b0 = bin( boards[0] )
+        b0len = len(b0) - 2
+        b1 = bin( boards[1] )
+        b1len = len(b1) - 2
+        matrix = [ ["0"] * WIDTH for x in range( HEIGHT ) ]
+        for r in range( HEIGHT ):
+            for c in range( WIDTH ):
+                pos = c * H1 + r
+                if b0len > pos and b0[-pos - 1] == '1':
+                    matrix[r][c] = "1"
+                elif b1len > pos and b1[-pos - 1] == '1':
+                    matrix[r][c] = "2"
+                else:
+                    matrix[r][c] = "0"
+        print( '\n'.join( [ ' '.join( row ) for row in reversed( matrix ) ] ) )
+
+
 def interactivePlayer( turns, x, y, moves ):
+    """
+    waits for console input, does not have error handling
+    """
     return int( input( "Player {}! Input a number between 0 and 6!".format( ( turns & 1 ) + 1 ) ) )
 
 
 def randomPlayer( turns, boards, height, moves ):
     """
-    plays randomly unless enemy can win or heself can win
+    plays randomly unless enemy can win or itself can win
     """
-    HEIGHT = 6
     H1 = HEIGHT + 1
-    WIDTH = 7
     while True:
         newcol = random.randint( 0, WIDTH - 1 )
         if( height[newcol] < ( newcol + 1 ) * H1 - 1 ):
@@ -46,8 +95,8 @@ class GabrielPlayer:
     def __init__( self, steps = 9, verbose = 0 ):
         self._verbose = verbose
         self._STEPS = steps
-        self._HEIGHT = 6
-        self._WIDTH = 7
+        self._HEIGHT = HEIGHT
+        self._WIDTH = WIDTH
         self._H1 = self._HEIGHT + 1
         self._SIZE = self._HEIGHT * self._WIDTH
         self._shifts = []
@@ -87,27 +136,6 @@ class GabrielPlayer:
                 if self._canWin( newboard ):
                     return col
         return -1
-
-
-    def _printBoard( self, boards ):
-        """
-        Prints board
-        """
-        b0 = bin( boards[0] )
-        b0len = len(b0) - 2
-        b1 = bin( boards[1] )
-        b1len = len(b1) - 2
-        matrix = [ ["0"] * self._WIDTH for x in range( self._HEIGHT ) ]
-        for r in range( self._HEIGHT ):
-            for c in range( self._WIDTH ):
-                pos = c * self._H1 + r
-                if b0len > pos and b0[-pos - 1] == '1':
-                    matrix[r][c] = "1"
-                elif b1len > pos and b1[-pos - 1] == '1':
-                    matrix[r][c] = "2"
-                else:
-                    matrix[r][c] = "0"
-        print( '\n'.join( [ ' '.join( row ) for row in reversed( matrix ) ] ) )
 
 
     def _boardcode( self, boards, turns ):
