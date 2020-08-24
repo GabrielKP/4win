@@ -97,6 +97,7 @@ class FourWins:
         """
         self._printBoard()
         print( "Player {} has won!".format( player + 1 ) )
+        print( self._moves )
 
 
     def _printBoard( self ):
@@ -133,17 +134,19 @@ class FourWins:
             # 0
             if self._verbose > 0:
                 self._printBoard()
+                print( "Boards: {}".format( self._boards ) )
             # 1
             curr_player = self._turns & 1
             start, startP = timeit.default_timer(), time.process_time()
             newcol = self._players[curr_player]( self._turns, self._boards, self._height, self._moves )
-            end, endP = timeit.default_timer(), time.process_time()
-            print( "Defaulttime: {}".format( end - start ) )
-            print( "Processtime: {}".format( endP - startP ) )
+            if self._verbose > 0:
+                end, endP = timeit.default_timer(), time.process_time()
+                print( "Defaulttime: {}".format( end - start ) )
+                print( "Processtime: {}".format( endP - startP ) )
             # 2
             if not self._islegal( newcol ):
                 self._terminate( self._turns + 1 & 1 )
-                return
+                return ( curr_player + 1 ) % 2
             self._makemove( newcol )
             # 3
             if self._haswon():
@@ -155,7 +158,7 @@ class FourWins:
 def main():
     gbp = GabrielPlayer()
     winners = [ 0,0 ]
-    for _ in range( 100 ):
+    for _ in range( 10 ):
         win = FourWins( randomPlayer, gbp.nextMove, 1 ).start()
         winners[win] += 1
     print( winners )
