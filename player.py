@@ -6,6 +6,7 @@
 import random
 import copy
 import sys
+import multiprocessing as mp
 
 WIDTH = 7
 HEIGHT = 6
@@ -187,6 +188,17 @@ class GabrielPlayer:
         return ret
 
 
+    def _startBacktrack( self, column, gamestate, turns, plock, result ):
+        currentp = turns & 1
+        ret = self._backtrack( gamestate, self._STEPS )
+        score = currentp * ( ret[1] - ret[0] )  + ( not currentp ) * ( ret[1] - ret[0])
+        result.put( ( score, column ) )
+        plock.acquire()
+        print( "Column {}: {}, score {}".format( column, ret, score ) )
+        plock.release()
+        return 0
+
+
     def nextMove( self, turns, boards, height, moves ):
         """
         determines the next move
@@ -209,24 +221,37 @@ class GabrielPlayer:
         root = self.GameState( boards, height, turns, self._boardcode( boards, turns ) )
 
         self._statedic = {}
-        result = []
+
+        result = mp.Queue( 7 )
+        ps = []
+        plock = mp.Lock()
+
         for col in range( 0, self._WIDTH ):
             if root.height[col] < self._maxHeight[col]:
+                # Prepare new state
                 newboards = root.boards[:]
                 newboards[currentp] = root.boards[currentp] ^ ( 1 << root.height[col] )
                 newheight = root.height[:]
                 newheight[col] += 1
                 newbc = newboards[(root.turns + 1) & 1] + newboards[0] + newboards[1]
-                if newbc in self._statedic:
-                    ret = self._statedic[newbc]
-                else:
-                    newstate = self.GameState( newboards, newheight, root.turns + 1, newbc )
-                    ret = self._backtrack( newstate, self._STEPS )
-                score = currentp * ( ret[1] - ret[0] )  + ( not currentp ) * ( ret[1] - ret[0])
-                result.append( ( score, col ) )
-                print( "Column {}: {}, score {}".format( col, ret, score ) )
+                newstate = self.GameState( newboards, newheight, root.turns + 1, newbc )
+                # ret = self._backtrack( newstate, self._STEPS )
 
-        newcol = max( result )[1]
+                # init process
+                p = mp.Process( target=self._startBacktrack, args=( col, newstate, turns, plock, result, ) )
+                p.start()
+                ps.append( p )
+
+        # Wait for processes to finish
+        for p in ps:
+            p.join()
+
+        maxval, newcol = result.get()
+        while not result.empty():
+            sr = result.get()
+            if sr[0] > maxval:
+                maxval, newcol = sr
+
         print( "Placing in column {}".format( newcol ) )
 
         return newcol
