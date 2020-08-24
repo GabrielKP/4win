@@ -76,6 +76,13 @@ class GabrielPlayer:
     """
     multicore connect 4 player, steps is how many steaps ahead the player will look
     """
+    # Improvements:
+    # - Better score computation
+    #   - (Taking difference is too simple)
+    #   - Special cases score bonus( zwickmühle )
+    # - procedural statedic synchronisation between processes
+    # - Adaptive amount of steps
+    #   - Heuristic when to use more, when less
 
 
     def __init__( self, steps = 9, verbose = 0 ):
@@ -136,7 +143,7 @@ class GabrielPlayer:
         Go stepsLeft deep into the tree of possible gamestates
         and compute scores for them
         """
-        modifier = (stepsLeft + 1) ** 2
+        modifier = (stepsLeft + 1) ** 4
         boards = gamestate[0]
         height = gamestate[1]
         turns = gamestate[2]
