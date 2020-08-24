@@ -1,8 +1,6 @@
 # Player functions for 4wins
 # @TODO
-# GUI
 # multi core player
-# bugfix player (bad defense)
 # Get rid of GameState
 
 import random
@@ -104,7 +102,7 @@ class GabrielPlayer:
         self._shifts.append( self._H1 + 1 ) # Diagonal /
         self._shifts.append( self._H1 )     # Horizontal -
         self._shifts.append( 1 )            # Vertikal |
-        self._maxHeight = [ 5,12,19,26,33,40,47 ]
+        self._maxHeight = [ 6,13,20,27,34,41,48 ]
 
         # 6 13 20 27 34 41 48 55
         # 5 12 19 26 33 40 47 54
