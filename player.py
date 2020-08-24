@@ -1,7 +1,4 @@
 # Player functions for 4wins
-# @TODO
-# multi core player
-# Get rid of GameState
 
 import random
 import copy
@@ -76,19 +73,9 @@ def randomPlayer( turns, boards, height, moves ):
 
 
 class GabrielPlayer:
-
-
-    class GameState:
-        """
-        Gamestate represents a specific state of the game with
-        both boards, the height and the amount of turns
-        """
-
-        def __init__( self, boards, height, turns, bc ):
-            self.boards = boards
-            self.height = height
-            self.turns = turns
-            self.bc = bc
+    """
+    multicore connect 4 player, steps is how many steaps ahead the player will look
+    """
 
 
     def __init__( self, steps = 9, verbose = 0 ):
@@ -150,15 +137,18 @@ class GabrielPlayer:
         and compute scores for them
         """
         modifier = (stepsLeft + 1) ** 2
-        bc = gamestate.bc
-        currentp = gamestate.turns & 1
+        boards = gamestate[0]
+        height = gamestate[1]
+        turns = gamestate[2]
+        bc = gamestate[3]
+        currentp = turns & 1
 
-        if self._canWin( gamestate.boards[0] ): # 1. Check for win player 0
+        if self._canWin( boards[0] ): # 1. Check for win player 0
             ret = [modifier, 0]
             self._statedic[bc] = ret
             return ret
 
-        if self._canWin( gamestate.boards[1] ): # 2. Check for win player 1
+        if self._canWin( boards[1] ): # 2. Check for win player 1
             ret = [0, modifier]
             self._statedic[bc] = ret
             return ret
@@ -169,17 +159,17 @@ class GabrielPlayer:
 
         ret = [0, 0]                            # 4. Substates
         for col in range( 0, self._WIDTH ):
-            if gamestate.height[col] < self._maxHeight[col]:
-                newboards = gamestate.boards[:]
-                newboards[currentp] = gamestate.boards[currentp] ^ ( 1 << gamestate.height[col] )
-                newheight = gamestate.height[:]
+            if height[col] < self._maxHeight[col]:
+                newboards = boards[:]
+                newboards[currentp] = boards[currentp] ^ ( 1 << height[col] )
+                newheight = height[:]
                 newheight[col] += 1
-                # No state creation needed if it is in dic already
-                newbc = newboards[(gamestate.turns + 1) & 1] + newboards[0] + newboards[1]
+                # No repeated function call needed if it is in dic already
+                newbc = newboards[(turns + 1) & 1] + newboards[0] + newboards[1]
                 if newbc in self._statedic:
                     p1, p2 = self._statedic[newbc]
                 else:
-                    newstate = self.GameState( newboards, newheight, gamestate.turns + 1, newbc )
+                    newstate = ( newboards, newheight, turns + 1, newbc, )
                     p1, p2 = self._backtrack( newstate, stepsLeft - 1 )
                 ret[0] += p1
                 ret[1] += p2
@@ -189,6 +179,9 @@ class GabrielPlayer:
 
 
     def _startBacktrack( self, column, gamestate, turns, plock, result ):
+        """
+        Starts Backtrace on its own, meant to be called by own process
+        """
         currentp = turns & 1
         ret = self._backtrack( gamestate, self._STEPS )
         score = currentp * ( ret[1] - ret[0] )  + ( not currentp ) * ( ret[1] - ret[0])
@@ -217,8 +210,8 @@ class GabrielPlayer:
             print( "Placing in column {}".format( res ) )
             return res
 
-        # Create current game as Node:
-        root = self.GameState( boards, height, turns, self._boardcode( boards, turns ) )
+        # Create current game as Tupel:
+        root = ( boards, height, turns, self._boardcode( boards, turns ), )
 
         self._statedic = {}
 
@@ -227,15 +220,14 @@ class GabrielPlayer:
         plock = mp.Lock()
 
         for col in range( 0, self._WIDTH ):
-            if root.height[col] < self._maxHeight[col]:
+            if root[1][col] < self._maxHeight[col]:
                 # Prepare new state
-                newboards = root.boards[:]
-                newboards[currentp] = root.boards[currentp] ^ ( 1 << root.height[col] )
-                newheight = root.height[:]
+                newboards = root[0][:]
+                newboards[currentp] = root[0][currentp] ^ ( 1 << root[1][col] )
+                newheight = root[1][:]
                 newheight[col] += 1
-                newbc = newboards[(root.turns + 1) & 1] + newboards[0] + newboards[1]
-                newstate = self.GameState( newboards, newheight, root.turns + 1, newbc )
-                # ret = self._backtrack( newstate, self._STEPS )
+                newbc = newboards[(root[2] + 1) & 1] + newboards[0] + newboards[1]
+                newstate = ( newboards, newheight, root[2] + 1, newbc, )
 
                 # init process
                 p = mp.Process( target=self._startBacktrack, args=( col, newstate, turns, plock, result, ) )
