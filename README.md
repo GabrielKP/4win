@@ -1,21 +1,30 @@
 # 4wins
 
-This is a Python version of the old classic 4wins!
+This is a Python version of the old classic connect 4!
 Goal is to have a competition who builds the best 4wins player!
 
 ## Startup
-You will need python3. Clone this repository and you are ready to go! The Game startup can be changed in [4win.py](4win.py)
+You will need python3. Clone this repository and you are ready to go! The Game startup can be changed in [main.py](main.py)
+
+To start a game, in the `main()` function of `main`:
+0. Initialize player objects if needed
+1. Create a 4wins object: `fw = FourWins( player1NextMove, player2NextMove, verbosity )
+    - player1NextMove/player2NextMove are the functions of the respective player
+    - verbosity toggles the console output of the main game (not the players), 0 no output, 1 output
+2. Call `fw.start()`, it will return the winners id ( player1 has 0, player2 has 1 )
 
 ## Structure
-Built modular:
-
     .
-    ├── 4win.py                  # This is the Basegame, all commits regarding it go directly to master
-    ├── StandardPlayer.py        # The Standard Player Implementation, commits -> master
-    ├── InteractivePlayer.py     # An interactive Player, if you want to play yourself!
-    ├── ExamplePlayer.py         # An example Player to copy and then, commits -> master
-    ├── [otherPlayers].py      # Specific other players, commits -> own branch
+    ├── main.py                 # class included connect 4 game
+    ├── player.py               # all player functions and classes
+    ├── gui.py                  # file with some code for gui, not functional yet
+    ├── old                     # folder including old (slower) connect 4 implementation
     └── README.md
+
+## Game
+The game is based on John Tromps implementation of connect 4: https://tromp.github.io/c4/c4.html
+
+There also is a detailed explanation how it works: https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md
 
 ## Player
 
@@ -24,15 +33,13 @@ Built modular:
 - The Player cannot take more then 60 seconds on initialization
 - The Player cannot take more then 10 seconds in each turn
 - The Player shall not return a wrong column to place the stone in (e.g. a full column)
-- The Player does not touch any variables of the Game directly! (use getter functions)
-- The Player is not built by using existing frameworks (e.g. TensorFlow)
-- The Player idea is built by your own logic and not using code from the internet
 
 ### What does the player need to have?
-- The Player needs to have following variables: playerName
-- The Player needs to have following functions: nextTurn
-- Look at the ExamplePlayer for further information
+For the connect 4 game to work your player(class) needs to implement a nextMove function which takes `boards`, `height`, `moves` and `turns` as argument and returns a valid column as int:
+- `boards` is a list of two int, representing a bitmap for each player.
+    - `boards[0]` for player 0 and `boards[1]` for player 1.
+- `height` is a list, including an int for each column, which next bit in `boards` is free.
+- `moves` is the a list of all moves since the beginning
+- `turns` is the amount of turns
 
-### Which functions and Variable from the FourWins class can I use?
-- You can not use any variable which is in FourWins
-- You can use all functions without a underscore "_" in front, which are in the moment: 'getMatrix, getStone, getFullness, getFullnessCol, moveLegal'
+You can find a detailed explanation [here](https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md)
